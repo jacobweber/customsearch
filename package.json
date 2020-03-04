@@ -1,0 +1,64 @@
+{
+  "name": "customsearch",
+  "version": "1.0.0",
+  "description": "Custom searches in a popup window.",
+  "main": "dist/main.js",
+  "scripts": {
+    "postinstall": "electron-builder install-app-deps",
+    "clean": "rm -rf dist out",
+    "sync": "rm -rf dist && rsync -a --exclude '*.ts' src/ dist/",
+    "build-dev": "npm run sync && tsc --sourcemap",
+    "build": "npm run sync && tsc",
+    "watch": "tsc -w",
+    "lint": "tslint -c tslint.json -p tsconfig.json",
+    "start": "npm run build-dev && electron . --inspect=5858",
+    "pack": "npm run build && electron-builder --dir",
+    "dist-mac": "npm run build && electron-builder --mac",
+    "dist-lin": "npm run build && electron-builder --linux",
+    "dist-win": "npm run build && electron-builder --win --x64 --ia32",
+    "dist": "npm run build && electron-builder --mac --linux --win --x64 --ia32"
+  },
+  "build": {
+    "productName": "Custom Search",
+    "appId": "com.jacobweber.customsearch",
+    "directories": {
+      "output": "out"
+    },
+    "files": [
+      "dist"
+    ],
+    "extraResources": [
+      {
+        "from": "${env.SEARCHES_PATH}",
+        "to": "searches"
+      }
+    ],
+    "mac": {
+      "category": "public.app-category.utilities",
+      "target": "zip",
+      "identity": false
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
+  },
+  "author": "Jacob Weber",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^8.0.3",
+    "electron-builder": "^22.4.0",
+    "tslint": "^6.0.0",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "electron-better-ipc": "^0.8.0",
+    "fs-extra": "^8.1.0",
+    "jsforce": "^1.9.3",
+    "keytar": "^5.4.0",
+    "node-fetch": "^2.6.0",
+    "xml2js": "^0.4.23"
+  }
+}

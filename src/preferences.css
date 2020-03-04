@@ -1,0 +1,93 @@
+* {
+	box-sizing: border-box;
+}
+html {
+	width: 100%;
+	height: 100%;
+}
+body {
+	width: 100%;
+	height: 100%;
+	margin: 0px;
+	padding: 10px;
+	font-family: Arial;
+	font-size: 15px;
+}
+.preferences {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+.preferences .content {
+	flex: 1;
+	overflow-y: auto;
+}
+.content .row {
+	min-height: 30px;
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+	margin-bottom: 10px;
+}
+.content .label {
+	width: 30%;
+	margin-right: 30px;
+}
+.content .text-field {
+	border: 1px solid black;
+	height: 30px;
+	flex: 1;
+	padding: 10px;
+}
+.content .text-field:active {
+	border: 1px solid #84bbf3;
+}
+.search-types-path {
+	margin-right: 10px;
+}
+.buttons {
+	margin-top: 10px;
+	display: flex;
+	justify-content: flex-end;
+}
+.button {
+	outline: none;
+	border-radius: 6px;
+	display: inline-block;
+	cursor: pointer;
+	color: #666666;
+	font-size: inherit;
+	font-weight: bold;
+	text-decoration: none;
+}
+.button:active {
+	position: relative;
+	top: 1px;
+}
+.button-standard {
+	box-shadow: inset 0px 1px 0px 0px #ffffff;
+	background: linear-gradient(to bottom, #ffffff 5%, #f6f6f6 100%);
+	background-color: #ffffff;
+	border: 1px solid #dcdcdc;
+	text-shadow: 0px 1px 0px #ffffff;
+}
+.button-standard:active {
+	background: linear-gradient(to bottom, #f6f6f6 5%, #ffffff 100%);
+	background-color: #f6f6f6;
+}
+.buttons .button {
+	padding: 6px 24px;
+}
+.button-default {
+	box-shadow: inset 0px 1px 0px 0px #dcecfb;
+	background: linear-gradient(to bottom, #bddbfa 5%, #80b5ea 100%);
+	background-color: #bddbfa;
+	border: 1px solid #84bbf3;
+	text-shadow: 0px 1px 0px #528ecc;
+	margin-left: 10px;
+}
+.button-default:active {
+	background: linear-gradient(to bottom, #80b5ea 5%, #bddbfa 100%);
+	background-color: #80b5ea;
+}
