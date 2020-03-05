@@ -138,7 +138,8 @@ const appReady = async () => {
 	}
 	await savePreferences(prefs);
 
-	tray = new Tray(path.join(__dirname, 'menubar.png'));
+	const icon = process.platform === 'darwin' ? 'trayTransparentTemplate.png' : 'trayOpaque.png';
+	tray = new Tray(path.join(__dirname, icon));
 
 	if (process.platform === 'win32') {
 		tray.on('click', (event) => tray.popUpContextMenu);
