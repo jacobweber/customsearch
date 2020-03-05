@@ -14,7 +14,7 @@ const {
 import { ipcMain } from 'electron-better-ipc';
 import * as url from 'url';
 import { preferencesWindow, showPreferencesWindow, hidePreferencesWindow } from './preferencesWindow';
-import { exportPrefs, loadPreferences, createPreferences, savePreferences, Preferences, GetPasswordFunc, CustomParamsMap, exportSearchTypes, completePreferences } from './preferences';
+import { exportPrefs, loadPreferences, createPreferences, savePreferences, Preferences, GetPasswordFunc, CustomParamsMap, exportSearchTypes } from './preferences';
 
 let win: Electron.BrowserWindow = null;
 let tray: Electron.Tray = null;
@@ -110,8 +110,7 @@ const setupMessages = () => {
 				globalShortcut.register(newPrefs.accelerator, showWindow);
 			}
 
-			newPrefs = await completePreferences(newPrefs);
-			await savePreferences(newPrefs, oldPrefs);
+			newPrefs = await savePreferences(newPrefs, oldPrefs);
 
 			hidePreferencesWindow();
 			prefs = newPrefs;
@@ -136,7 +135,6 @@ const appReady = async () => {
 		showPrefs = true;
 		prefs = await createPreferences();
 	}
-	await savePreferences(prefs);
 
 	const icon = process.platform === 'darwin' ? 'trayTransparentTemplate.png' : 'trayOpaque.png';
 	tray = new Tray(path.join(__dirname, icon));

@@ -121,14 +121,14 @@ export const getSearchTypes = async function(searchTypesPath: string): Promise<S
 	}
 };
 
-export const savePreferences = async function(data: Preferences = {}, oldData: Preferences = null): Promise<void> {
-	const customParamsToSave: CustomParamsMap = {};
-	if (!data.customParams) data.customParams = {};
-	for (const searchType of data.searchTypes) {
+export const savePreferences = async function(data: Preferences = {}, oldData: Preferences = null): Promise<Preferences> {
+	const searchTypes = await getSearchTypes(data.searchTypesPath);
+	const customParams: CustomParamsMap = {};
+	for (const searchType of searchTypes) {
 		if (searchType.customParams) {
 			for (const param of searchType.customParams) {
 				const fullName = searchType.id + '.' + param.name;
-				const newValue = data.customParams[fullName] !== undefined ? data.customParams[fullName] : '';
+				const newValue = data.customParams && data.customParams[fullName] !== undefined ? data.customParams[fullName] : '';
 				if (param.password) {
 					const oldValue = oldData && oldData.customParams && oldData.customParams[fullName] !== undefined ? oldData.customParams[fullName] : '';
 					const changed = (newValue.length > 0 && newValue !== dummyPasswordValue)
@@ -140,10 +140,9 @@ export const savePreferences = async function(data: Preferences = {}, oldData: P
 							await keytar.deletePassword('customSearch.' + fullName, 'password');
 						}
 					}
-					data.customParams[fullName] = newValue.length > 0 ? dummyPasswordValue : '';
-					customParamsToSave[fullName] = data.customParams[fullName];
+					customParams[fullName] = newValue.length > 0 ? dummyPasswordValue : '';
 				} else {
-					customParamsToSave[fullName] = newValue;
+					customParams[fullName] = newValue;
 				}
 			}
 		}
@@ -158,16 +157,27 @@ export const savePreferences = async function(data: Preferences = {}, oldData: P
 		}
 	}
 
+	data = {
+		...data,
+		searchTypes,
+		customParams
+	};
+	await writePreferences(data);
+	return data;
+};
+
+const writePreferences = async function(data: Preferences): Promise<void> {
 	const dataToSave = {
 		launchStartup: data.launchStartup,
 		accelerator: data.accelerator,
 		searchTypesPath: data.searchTypesPath,
 		searchTypesOrder: data.searchTypesOrder,
-		customParams: customParamsToSave
+		customParams: data.customParams
 	};
 
 	const dataJSON = JSON.stringify(dataToSave);
-	return await fsPromises.writeFile(path.join(userData, 'settings.json'), dataJSON, { encoding: 'utf8' });
+	await fsPromises.writeFile(path.join(userData, 'settings.json'), dataJSON, { encoding: 'utf8' });
+	return;
 };
 
 export const loadPreferences = async function(): Promise<Preferences> {
@@ -181,7 +191,12 @@ export const loadPreferences = async function(): Promise<Preferences> {
 	if (data === null) {
 		return null;
 	}
-	return completePreferences(data);
+
+	const searchTypes = await getSearchTypes(data.searchTypesPath);
+	return {
+		...data,
+		searchTypes
+	};
 };
 
 export const createPreferences = async function(): Promise<Preferences> {
@@ -203,19 +218,15 @@ export const createPreferences = async function(): Promise<Preferences> {
 			await fs.ensureDir(searchTypesPath);
 		}
 	}
-	const prefs = await completePreferences({
+
+	const searchTypes = await getSearchTypes(searchTypesPath);
+	const searchTypesOrder = searchTypes.map(type => type.id).join(',');
+	const prefs: Preferences = {
 		...defaultPrefs,
-		searchTypesPath
-	});
-	prefs.searchTypesOrder = prefs.searchTypes.map(type => type.id).join(',');
+		searchTypes,
+		searchTypesPath,
+		searchTypesOrder
+	};
+	await writePreferences(prefs);
 	return prefs;
 };
-
-export const completePreferences = async function(data: Preferences = {}): Promise<Preferences>  {
-	const searchTypes = await getSearchTypes(data.searchTypesPath);
-	const completed: Preferences = {
-		...data,
-		searchTypes
-	};
-	return completed;
-}
