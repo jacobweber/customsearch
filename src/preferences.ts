@@ -184,26 +184,33 @@ const writePreferences = async function(data: Preferences): Promise<void> {
 	return;
 };
 
-export const loadPreferences = async function(): Promise<Preferences> {
-	let data: Preferences = null;
+export const loadPreferences = async function(): Promise<{
+		prefs: Preferences,
+		justCreated: boolean
+	}> {
+	let justCreated = false;
+	let prefs: Preferences = null;
 	try {
 		const dataJSON = await fsPromises.readFile(path.join(userData, 'settings.json'), { encoding: 'utf8' });
-		data = JSON.parse(dataJSON);
-		if (!data) data = null;
+		prefs = JSON.parse(dataJSON);
+		if (!prefs) prefs = null;
 	} catch (e) {
 	}
-	if (data === null) {
-		return null;
-	}
 
-	const searchTypes = await getSearchTypes(data.searchTypesPath);
-	return {
-		...data,
-		searchTypes
-	};
+	if (prefs === null) {
+		prefs = await createPreferences();
+		justCreated = true;
+	} else {
+		const searchTypes = await getSearchTypes(prefs.searchTypesPath);
+		prefs = {
+			...prefs,
+			searchTypes
+		};
+	}
+	return { prefs, justCreated };
 };
 
-export const createPreferences = async function(): Promise<Preferences> {
+const createPreferences = async function(): Promise<Preferences> {
 	const searchTypesPath = path.join(app.getPath('userData'), 'searches');
 	let searchTypesExists = true;
 	try {
