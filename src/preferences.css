@@ -43,7 +43,7 @@ body {
 .content .text-field:active {
 	border: 1px solid #84bbf3;
 }
-.text-field + button {
+.text-field-button {
 	margin-left: 10px;
 }
 .buttons {
