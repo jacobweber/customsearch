@@ -158,7 +158,7 @@ const appReady = async () => {
 		{
 			label: 'Toggle Dev Tools',
 			role: 'toggleDevTools',
-			visible: app.isPackaged
+			visible: !app.isPackaged
 		},
 		{
 			type: 'separator'
