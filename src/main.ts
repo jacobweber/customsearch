@@ -76,7 +76,7 @@ const setupMessages = () => {
 		shell.openExternal(url);
 	});
 
-	ipcMain.answerRenderer('preferencesWindow.browse', async ({ path }: { path: string }) => {
+	ipcMain.answerRenderer('preferencesWindow.browse', async (path: string) => {
 		try {
 			const result = await dialog.showOpenDialog(preferencesWindow, {
 				properties: ['openDirectory'],
