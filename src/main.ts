@@ -16,7 +16,7 @@ const {
 import { ipcMain } from 'electron-better-ipc';
 import * as url from 'url';
 import { preferencesWindow, showPreferencesWindow, hidePreferencesWindow } from './preferencesWindow';
-import { exportPrefs, loadPreferences, savePreferences, Preferences, GetPasswordFunc, CustomParamsMap, exportSearchTypes } from './preferences';
+import { exportPrefs, loadPreferences, savePreferences, Preferences, GetPasswordFunc, CustomParamsMap, exportSearchTypes, SearchResult } from './preferences';
 
 let win: Electron.BrowserWindow = null;
 let tray: Electron.Tray = null;
@@ -28,7 +28,7 @@ const setupMessages = () => {
 	ipcMain.answerRenderer('get-prefs', async () => {
 		return await exportPrefs(prefs);
 	});
-	ipcMain.answerRenderer('search-text', async ({ id, text }: { id: string, text: string }) => {
+	ipcMain.answerRenderer('search-text', async ({ id, text }: { id: string, text: string }): Promise<SearchResult[]> => {
 		if (!prefs.searchTypes) return [];
 		// TODO: avoid creating every time
 		const searchType = prefs.searchTypes.find(x => x.id === id);
@@ -76,7 +76,7 @@ const setupMessages = () => {
 		shell.openExternal(url);
 	});
 
-	ipcMain.answerRenderer('preferencesWindow.browse', async (path: string) => {
+	ipcMain.answerRenderer('preferencesWindow.browse', async ({ path }: { path: string }) => {
 		try {
 			const result = await dialog.showOpenDialog(preferencesWindow, {
 				properties: ['openDirectory'],
@@ -92,7 +92,7 @@ const setupMessages = () => {
 			return null;
 		}
 	});
-	ipcMain.answerRenderer('preferencesWindow.open', async (path: string) => {
+	ipcMain.answerRenderer('preferencesWindow.open', async ({ path }: { path: string }) => {
 		if (path.length === 0) return;
 		try {
 			const result = await fsPromises.stat(path);

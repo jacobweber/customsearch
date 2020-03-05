@@ -213,12 +213,12 @@
 
 	document.getElementById('button-search-types-open').addEventListener('click', function() {
 		const path = document.getElementById('search-types-path').value;
-		window.ipc.callMain('preferencesWindow.open', path);
+		const result = await window.ipc.callMain('preferencesWindow.open', { path });
 	});
 
 	document.getElementById('button-search-types-browse').addEventListener('click', async function() {
 		const oldPath = document.getElementById('search-types-path').value;
-		const result = await window.ipc.callMain('preferencesWindow.browse', oldPath);
+		const result = await window.ipc.callMain('preferencesWindow.browse', { path: oldPath });
 		if (result) {
 			const { searchTypesPath, searchTypes, searchTypesOrder } = result;
 			document.getElementById('search-types-path').value = searchTypesPath;
