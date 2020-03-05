@@ -18,6 +18,7 @@ import * as url from 'url';
 import { preferencesWindow, showPreferencesWindow, hidePreferencesWindow } from './preferencesWindow';
 import { exportPrefs, loadPreferences, savePreferences, Preferences, GetPasswordFunc, CustomParamsMap, exportSearchTypes, SearchResult } from './preferences';
 
+app.allowRendererProcessReuse = true;
 let win: Electron.BrowserWindow = null;
 let tray: Electron.Tray = null;
 let prefs: Preferences = null;
