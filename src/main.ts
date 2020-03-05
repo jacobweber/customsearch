@@ -92,7 +92,7 @@ const setupMessages = () => {
 			return null;
 		}
 	});
-	ipcMain.answerRenderer('preferencesWindow.open', async ({ path }: { path: string }) => {
+	ipcMain.on('preferencesWindow.open', async (event, path: string) => {
 		if (path.length === 0) return;
 		try {
 			const result = await fsPromises.stat(path);
@@ -108,7 +108,7 @@ const setupMessages = () => {
 			globalShortcut.register(prefs.accelerator, showWindow);
 		}
 	});
-	ipcMain.on('preferencesWindow.ok', async (event, newPrefs) => {
+	ipcMain.on('preferencesWindow.ok', async (event, newPrefs: Preferences) => {
 		try {
 			const oldPrefs = prefs;
 			if (oldPrefs.accelerator) {
