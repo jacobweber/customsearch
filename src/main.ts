@@ -1,3 +1,5 @@
+import * as fs from 'fs-extra';
+const fsPromises = fs.promises;
 import * as path from 'path';
 import * as electron from 'electron';
 import * as keytar from 'keytar';
@@ -88,6 +90,16 @@ const setupMessages = () => {
 		} catch (err) {
 			console.error(err);
 			return null;
+		}
+	});
+	ipcMain.answerRenderer('preferencesWindow.open', async (path: string) => {
+		if (path.length === 0) return;
+		try {
+			const result = await fsPromises.stat(path);
+			if (result.isDirectory()) {
+				shell.showItemInFolder(path);
+			}
+		} catch (err) {
 		}
 	});
 	ipcMain.on('preferencesWindow.cancel', () => {

@@ -19,7 +19,8 @@
 			<div class="row">
 				<label class="label" for="search-types-path">Search Types Path:</label>
 				<input type="text" class="text-field search-types-path" id="search-types-path" />
-				<button class="button button-standard" id="button-search-types-path">Browse…</button>
+				<button class="button button-standard" id="button-search-types-browse">Browse…</button>
+				<button class="button button-standard" id="button-search-types-open">Open</button>
 			</div>
 			<div class="row">
 				<label class="label" for="search-types-order">Search Types Order:</label>
@@ -210,7 +211,12 @@
 		e.stopPropagation();
 	});
 
-	document.getElementById('button-search-types-path').addEventListener('click', async function() {
+	document.getElementById('button-search-types-open').addEventListener('click', function() {
+		const path = document.getElementById('search-types-path').value;
+		window.ipc.callMain('preferencesWindow.open', path);
+	});
+
+	document.getElementById('button-search-types-browse').addEventListener('click', async function() {
 		const oldPath = document.getElementById('search-types-path').value;
 		const result = await window.ipc.callMain('preferencesWindow.browse', { path: oldPath });
 		if (result) {
