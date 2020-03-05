@@ -22,6 +22,7 @@
 
 <script>
 (async function() {
+	const isMac = navigator.platform.toUpperCase().indexOf('MAC') !== -1;
 	const prefs = window.ipc ? await window.ipc.callMain('get-prefs') : {};
 	const winWidth = 600;
 	let winHeight = document.getElementById('content').offsetHeight;
@@ -324,19 +325,21 @@
 	});
 
 	document.getElementById('search').addEventListener('keydown', function(e) {
-		if (e.keyCode === 13) {
+		if (e.key === 'Escape') {
+			window.ipc.send('hide-window');
+		} else if (e.key === 'Enter') {
 			openSelectedItem();
-		} else if (e.keyCode === 9) {
+		} else if (e.key === 'Tab') {
 			handleTab(e);
-		} else if (e.keyCode === 38) {
+		} else if (e.key === 'ArrowUp') {
 			handleUp(e);
-		} else if (e.keyCode === 40) {
+		} else if (e.key === 'ArrowDown') {
 			handleDown(e);
-		} else if (e.keyCode === 33 || e.keyCode === 36) {
+		} else if (e.key === 'Home' || e.key === 'PageUp') {
 			handleStart(e);
-		} else if (e.keyCode === 34 || e.keyCode === 35) {
+		} else if (e.key === 'End' || e.key === 'PageDown') {
 			handleEnd(e);
-		} else if (e.keyCode === 67 && e.metaKey) {
+		} else if (e.key === 'c' && (isMac ? e.metaKey : e.ctrlKey)) {
 			handleCopy(e);
 		}
 	});

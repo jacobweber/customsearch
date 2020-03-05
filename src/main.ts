@@ -66,6 +66,9 @@ const setupMessages = () => {
 	ipcMain.on('show-window', () => {
 		win.show();
 	});
+	ipcMain.on('hide-window', () => {
+		hideWindow();
+	});
 	ipcMain.on('open-url', (event, url: string) => {
 		hideWindow();
 		shell.openExternal(url);
@@ -218,13 +221,6 @@ function createWindow () {
 	}));
 	//win.loadFile(path.resolve(__dirname, 'main.html'));
 	//win.webContents.openDevTools({ mode: 'detach' });
-
-	win.webContents.on('before-input-event', (event, input) => {
-		if (input.type === 'keyUp' && input.code === 'Escape') {
-			event.preventDefault();
-			hideWindow();
-		}
-	});
 
 	win.on('close', (event) => {
 		if (!quitting) {
