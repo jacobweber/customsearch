@@ -68,9 +68,11 @@ export interface ExportedSearchType {
 
 export interface ExportedPreferences {
 	launchStartup?: boolean;
-	searchTypes?: ExportedSearchType[];
+	searchTypesPath?: string;
 	searchTypesOrder?: string;
+	searchTypes?: ExportedSearchType[];
 	customParams?: CustomParamsMap;
+	accelerator?: string;
 };
 
 export const exportPrefs = async function(prefs: Preferences): Promise<ExportedPreferences> {
@@ -81,8 +83,10 @@ export const exportPrefs = async function(prefs: Preferences): Promise<ExportedP
 		exported.launchStartup = prefs.launchStartup;
 	}
 	exported.searchTypes = await exportSearchTypes(prefs.searchTypesPath);
+	exported.searchTypesPath = prefs.searchTypesPath;
 	exported.searchTypesOrder = prefs.searchTypesOrder;
 	exported.customParams = prefs.customParams;
+	exported.accelerator = prefs.accelerator;
 	return exported;
 };
 

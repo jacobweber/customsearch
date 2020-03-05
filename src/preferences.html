@@ -90,7 +90,7 @@
 
 	let prefs = {};
 	if (window.ipc) {
-		prefs = await window.ipc.callMain('preferencesWindow.get');
+		prefs = await window.ipc.callMain('get-prefs');
 		refreshCustomParamsFields(prefs.searchTypes, prefs.customParams);
 	}
 
