@@ -52,47 +52,6 @@
 			.replace(/'/g, '&#39;')
 			.replace(/</g, '&lt;')
 			.replace(/>/g, '&gt;') : '';
-	};
-
-	function refreshCustomParamsFields(searchTypes, customParams) {
-		const parent = document.getElementById('custom-params');
-		while (parent.firstChild) {
-			parent.removeChild(parent.firstChild);
-		}
-		let idx = 0;
-		searchTypes.forEach(searchType => {
-			if (!searchType.customParams) return;
-			searchType.customParams.forEach(param => {
-				let fullName = searchType.id + '.' + param.name;
-				let value = '';
-				if (customParams && customParams[fullName] !== undefined) value = customParams[fullName];
-				else if (!param.password && param.default !== undefined) value = param.default;
-				const html = `<div class="row custom-params-row">
-					<input type="hidden" class="custom-params-name" value="${htmlEscape(fullName)}" />
-					<label class="label" for="custom-params-value-${idx}">${htmlEscape(searchType.name + ' ' + param.label)}:</label>
-					<input type="${param.password ? 'password' : 'text'}" class="text-field custom-params-value" id="custom-params-value-${idx}" value="${htmlEscape(value)}" />
-				</div>`;
-				parent.insertAdjacentHTML('beforeend', html);
-				idx++;
-			});
-		});
-		document.getElementById('custom-params').style.display = idx > 0 ? 'block' : 'none'; 
-	};
-
-	function getEnteredCustomParams() {
-		const customParams = {};
-		Array.from(document.getElementsByClassName('custom-params-row')).map(function(row) {
-			const name = row.getElementsByClassName('custom-params-name')[0].value;
-			const value = row.getElementsByClassName('custom-params-value')[0].value;
-			customParams[name] = value;
-		});
-		return customParams;
-	}
-
-	let prefs = {};
-	if (window.ipc) {
-		prefs = await window.ipc.callMain('get-prefs');
-		refreshCustomParamsFields(prefs.searchTypes, prefs.customParams);
 	}
 
 	function getDisplayKeyStr(key) {
@@ -190,6 +149,47 @@
 			+ keyCode;
 	}
 
+	function refreshCustomParamsFields(searchTypes, customParams) {
+		const parent = document.getElementById('custom-params');
+		while (parent.firstChild) {
+			parent.removeChild(parent.firstChild);
+		}
+		let idx = 0;
+		searchTypes.forEach(searchType => {
+			if (!searchType.customParams) return;
+			searchType.customParams.forEach(param => {
+				let fullName = searchType.id + '.' + param.name;
+				let value = '';
+				if (customParams && customParams[fullName] !== undefined) value = customParams[fullName];
+				else if (!param.password && param.default !== undefined) value = param.default;
+				const html = `<div class="row custom-params-row">
+					<input type="hidden" class="custom-params-name" value="${htmlEscape(fullName)}" />
+					<label class="label" for="custom-params-value-${idx}">${htmlEscape(searchType.name + ' ' + param.label)}:</label>
+					<input type="${param.password ? 'password' : 'text'}" class="text-field custom-params-value" id="custom-params-value-${idx}" value="${htmlEscape(value)}" />
+				</div>`;
+				parent.insertAdjacentHTML('beforeend', html);
+				idx++;
+			});
+		});
+		document.getElementById('custom-params').style.display = idx > 0 ? 'block' : 'none'; 
+	};
+
+	function getEnteredCustomParams() {
+		const customParams = {};
+		Array.from(document.getElementsByClassName('custom-params-row')).map(function(row) {
+			const name = row.getElementsByClassName('custom-params-name')[0].value;
+			const value = row.getElementsByClassName('custom-params-value')[0].value;
+			customParams[name] = value;
+		});
+		return customParams;
+	}
+
+	let prefs = {};
+	if (window.ipc) {
+		prefs = await window.ipc.callMain('get-prefs');
+		refreshCustomParamsFields(prefs.searchTypes, prefs.customParams);
+	}
+
 	document.getElementById('launch-startup-row').style.display = prefs.launchStartup === null ? 'none' : 'block';
 	document.getElementById('launch-startup').checked = prefs.launchStartup;
 	document.getElementById('search-types-path').value = prefs.searchTypesPath || '';
@@ -198,6 +198,7 @@
 		document.getElementById('accelerator').value = prefs.accelerator;
 		document.getElementById('accelerator-display').value = getDisplayKeyStr(prefs.accelerator);
 	}
+
 	document.getElementById('accelerator-display').addEventListener('keydown', function(e) {
 		let keyStr = getKeyStr(e);
 		if (keyStr !== null) {
