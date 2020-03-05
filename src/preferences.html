@@ -213,7 +213,7 @@
 
 	document.getElementById('button-search-types-open').addEventListener('click', function() {
 		const path = document.getElementById('search-types-path').value;
-		const result = await window.ipc.callMain('preferencesWindow.open', { path });
+		await window.ipc.callMain('preferencesWindow.open', { path });
 	});
 
 	document.getElementById('button-search-types-browse').addEventListener('click', async function() {
