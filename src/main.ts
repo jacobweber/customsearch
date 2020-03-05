@@ -77,7 +77,7 @@ const setupMessages = () => {
 		shell.openExternal(url);
 	});
 
-	ipcMain.answerRenderer('preferencesWindow.browse', async ({ path }: { path: string }) => {
+	ipcMain.answerRenderer('prefs.search-types-select', async ({ path }: { path: string }) => {
 		try {
 			const result = await dialog.showOpenDialog(preferencesWindow, {
 				properties: ['openDirectory'],
@@ -93,7 +93,7 @@ const setupMessages = () => {
 			return null;
 		}
 	});
-	ipcMain.on('preferencesWindow.open', async (event, path: string) => {
+	ipcMain.on('prefs.search-types-open', async (event, path: string) => {
 		if (path.length === 0) return;
 		try {
 			const result = await fsPromises.stat(path);
@@ -103,13 +103,13 @@ const setupMessages = () => {
 		} catch (err) {
 		}
 	});
-	ipcMain.on('preferencesWindow.cancel', () => {
+	ipcMain.on('prefs.cancel', () => {
 		hidePreferencesWindow();
 		if (prefs.accelerator) {
 			globalShortcut.register(prefs.accelerator, showWindow);
 		}
 	});
-	ipcMain.on('preferencesWindow.ok', async (event, newPrefs: Preferences) => {
+	ipcMain.on('prefs.save', async (event, newPrefs: Preferences) => {
 		try {
 			const oldPrefs = prefs;
 			if (oldPrefs.accelerator) {

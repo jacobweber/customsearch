@@ -213,12 +213,12 @@
 
 	document.getElementById('button-search-types-open').addEventListener('click', function() {
 		const path = document.getElementById('search-types-path').value;
-		window.ipc.send('preferencesWindow.open', path);
+		window.ipc.send('prefs.search-types-open', path);
 	});
 
 	document.getElementById('button-search-types-browse').addEventListener('click', async function() {
 		const oldPath = document.getElementById('search-types-path').value;
-		const result = await window.ipc.callMain('preferencesWindow.browse', { path: oldPath });
+		const result = await window.ipc.callMain('prefs.search-types-select', { path: oldPath });
 		if (result) {
 			const { searchTypesPath, searchTypes, searchTypesOrder } = result;
 			document.getElementById('search-types-path').value = searchTypesPath;
@@ -229,7 +229,7 @@
 	});
 
 	document.getElementById('button-cancel').addEventListener('click', function() {
-		window.ipc.send('preferencesWindow.cancel');
+		window.ipc.send('prefs.cancel');
 	});
 
 	function submitForm() {
@@ -240,7 +240,7 @@
 		const accelerator = document.getElementById('accelerator').value;
 
 		if (window.ipc) {
-			window.ipc.send('preferencesWindow.ok', {
+			window.ipc.send('prefs.save', {
 				launchStartup,
 				searchTypesPath,
 				searchTypesOrder,
@@ -254,7 +254,7 @@
 
 	document.addEventListener('keydown', function(e) {
 		if (e.key === 'Escape') {
-			window.ipc.send('preferencesWindow.cancel');
+			window.ipc.send('prefs.cancel');
 		} else if (e.key === 'Enter' || e.key === 'Return') {
 			submitForm();
 		}
