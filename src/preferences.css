@@ -43,8 +43,8 @@ body {
 .content .text-field:active {
 	border: 1px solid #84bbf3;
 }
-.search-types-path {
-	margin-right: 10px;
+.text-field + button {
+	margin-left: 10px;
 }
 .buttons {
 	margin-top: 10px;

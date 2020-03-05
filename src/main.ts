@@ -86,8 +86,7 @@ const setupMessages = () => {
 			if (result.canceled) return null;
 			const searchTypesPath = result.filePaths[0];
 			const searchTypes = await exportSearchTypes(searchTypesPath);
-			const searchTypesOrder = searchTypes.map(type => type.id).join(',');
-			return { searchTypesPath, searchTypes, searchTypesOrder };
+			return { searchTypesPath, searchTypes };
 		} catch (err) {
 			console.error(err);
 			return null;

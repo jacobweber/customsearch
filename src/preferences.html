@@ -25,6 +25,7 @@
 			<div class="row">
 				<label class="label" for="search-types-order">Search Types Order:</label>
 				<input type="text" class="text-field search-types-order" id="search-types-order" />
+				<button class="button button-standard" id="button-search-types-order-reset">Reset</button>
 			</div>
 			<div class="row">
 				<label class="label" for="accelerator-display">Keyboard Shortcut:</label>
@@ -221,12 +222,18 @@
 		const oldPath = document.getElementById('search-types-path').value;
 		const result = await window.ipc.callMain('prefs.search-types-browse', { path: oldPath });
 		if (result) {
-			const { searchTypesPath, searchTypes, searchTypesOrder } = result;
+			const { searchTypesPath, searchTypes } = result;
+			prefs.searchTypes = searchTypes;
+			const searchTypesOrder = searchTypes.map(type => type.id).join(',');
 			document.getElementById('search-types-path').value = searchTypesPath;
 			document.getElementById('search-types-order').value = searchTypesOrder;
 			const customParams = getEnteredCustomParams();
 			refreshCustomParamsFields(searchTypes, customParams);
 		}
+	});
+
+	document.getElementById('button-search-types-order-reset').addEventListener('click', function() {
+		document.getElementById('search-types-order').value = prefs.searchTypes.map(type => type.id).join(',');
 	});
 
 	document.getElementById('button-cancel').addEventListener('click', function() {
