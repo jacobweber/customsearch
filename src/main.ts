@@ -77,7 +77,7 @@ const setupMessages = () => {
 		shell.openExternal(url);
 	});
 
-	ipcMain.answerRenderer('prefs.search-types-select', async ({ path }: { path: string }) => {
+	ipcMain.answerRenderer('prefs.search-types-browse', async ({ path }: { path: string }) => {
 		try {
 			const result = await dialog.showOpenDialog(preferencesWindow, {
 				properties: ['openDirectory'],

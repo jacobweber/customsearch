@@ -218,7 +218,7 @@
 
 	document.getElementById('button-search-types-browse').addEventListener('click', async function() {
 		const oldPath = document.getElementById('search-types-path').value;
-		const result = await window.ipc.callMain('prefs.search-types-select', { path: oldPath });
+		const result = await window.ipc.callMain('prefs.search-types-browse', { path: oldPath });
 		if (result) {
 			const { searchTypesPath, searchTypes, searchTypesOrder } = result;
 			document.getElementById('search-types-path').value = searchTypesPath;
