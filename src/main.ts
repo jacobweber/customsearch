@@ -84,13 +84,14 @@ const setupMessages = () => {
 				defaultPath: path
 			});
 			if (result.canceled) return null;
-			const searchTypesPath = result.filePaths[0];
-			const searchTypes = await exportSearchTypes(searchTypesPath);
-			return { searchTypesPath, searchTypes };
+			return result.filePaths[0];
 		} catch (err) {
 			console.error(err);
 			return null;
 		}
+	});
+	ipcMain.answerRenderer('prefs.search-types-get', async ({ path }: { path: string }) => {
+		return await exportSearchTypes(path);
 	});
 	ipcMain.on('prefs.search-types-open', async (event, path: string) => {
 		if (path.length === 0) return;
