@@ -9,6 +9,7 @@ module.exports = {
 	'icon': string; name of 64x64px icon in same directory, to display in search list
 	'maskIcon': boolean; true to make icon white when selected
 	'css': string; CSS rules to add to search results
+	'autoUpdate': boolean; true to update module when app launched
 	'customParams': array of objects defining custom preferences settings:
 		'id': string, required; unique identifier
 		'label': string, required; label to display

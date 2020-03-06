@@ -1,10 +1,12 @@
 const path = require('path');
+console.log('reload');
 
 module.exports = {
 	'id': 'jira',
 	'label': 'JIRA',
 	'icon': 'icon.png',
 	'maskIcon': true,
+	'autoUpdate': true,
 	'customParams': [
 		{
 			id: 'url',

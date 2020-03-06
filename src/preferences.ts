@@ -45,6 +45,7 @@ export interface SearchType {
 	search: (search: string, customParams: CustomParamsMap, getPassword: GetPasswordFunc, modulesPath: string) => Promise<SearchResult[]>;
 	maskIcon?: boolean;
 	customParams?: CustomParamDef[];
+	autoUpdate: boolean;
 	css?: string;
 }
 
@@ -190,6 +191,9 @@ export const loadPreferences = async function(): Promise<{
 	prefs: Preferences,
 	justCreated: boolean
 }> {
+	const defaults = await loadDefaults();
+	await copyDefaultSearchTypes(defaults);
+
 	let justCreated = false;
 	let prefs: Preferences = null;
 	try {
@@ -200,15 +204,15 @@ export const loadPreferences = async function(): Promise<{
 	}
 
 	if (prefs === null) {
-		prefs = await createPreferences();
+		prefs = await createPreferences(defaults);
 		justCreated = true;
-	} else {
-		const searchTypes = await loadSearchTypes();
-		prefs = {
-			...prefs,
-			searchTypes
-		};
 	}
+
+	const searchTypes = await loadSearchTypes();
+	prefs = {
+		...prefs,
+		searchTypes
+	};
 	return { prefs, justCreated };
 };
 
@@ -237,34 +241,31 @@ const copyDefaultSearchTypes = async function(defaults: Defaults): Promise<void>
 	}
 
 	try {
+		const existingSearchTypes = await loadSearchTypes();
 		const files = (await fsPromises.readdir(sourcePath)).filter((file: string): boolean => {
 			return file === readme || !defaults.searchTypes || defaults.searchTypes.includes(file);
 		});
 		await Promise.all(files.map(async file => {
-			await fs.copy(
-				path.join(sourcePath, file),
-				path.join(searchTypesPath, file)
-			);
+			const existing = existingSearchTypes.find(type => type.id === file);
+			if (!existing || existing.autoUpdate) {
+				if (existing) {
+					await fs.remove(path.join(searchTypesPath, file));
+				}
+				await fs.copy(
+					path.join(sourcePath, file),
+					path.join(searchTypesPath, file)
+				);
+			}
 		}));
 	} catch (err) {
 		console.error(err);
 	}
 };
 
-const createPreferences = async function(): Promise<Preferences> {
-	const defaults = await loadDefaults();
-
-	try {
-		await fsPromises.stat(searchTypesPath);
-	} catch (err) {
-		await copyDefaultSearchTypes(defaults);
-	}
-
-	const searchTypes = await loadSearchTypes();
+const createPreferences = async function(defaults: Defaults): Promise<Preferences> {
 	const searchTypesOrder = defaults.searchTypes.join(',');
 	const prefs: Preferences = {
 		...defaultPrefs,
-		searchTypes,
 		searchTypesOrder,
 		customParams: defaults.customParams || {}
 	};

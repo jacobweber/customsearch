@@ -4,6 +4,7 @@ module.exports = {
 	'id': 'threescale',
 	'label': '3scale',
 	'icon': 'icon.png',
+	'autoUpdate': true,
 	'customParams': [
 		{
 			id: 'url',

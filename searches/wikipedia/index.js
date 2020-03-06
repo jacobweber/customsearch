@@ -8,6 +8,7 @@ module.exports = {
 	'css': `.result .searchmatch {
 		font-weight: bold;
 	}`,
+	'autoUpdate': true,
 	'customParams': [
 		{
 			id: 'url',

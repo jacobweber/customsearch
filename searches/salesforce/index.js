@@ -5,6 +5,7 @@ module.exports = {
 	'id': 'salesforce',
 	'label': 'Salesforce',
 	'icon': 'icon.png',
+	'autoUpdate': true,
 	'customParams': [
 		{
 			id: 'username',

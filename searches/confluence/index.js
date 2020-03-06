@@ -5,6 +5,7 @@ module.exports = {
 	'label': 'Confluence',
 	'icon': 'icon.png',
 	'maskIcon': true,
+	'autoUpdate': true,
 	'customParams': [
 		{
 			id: 'url',
