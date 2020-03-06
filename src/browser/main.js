@@ -19,6 +19,7 @@
 	let searchText = [];
 	let searchResults = [];
 	let searchErrors = [];
+	let searchNonces = [];
 	let currentType = 0;
 	let currentResult = 0;
 	let runningSearches = 0;
@@ -70,7 +71,12 @@
 		try {
 			runningSearches++;
 			document.getElementById('spinner').style.visibility = 'visible';
+			const localNonce = searchNonces[type] = new Object();
 			const output = await window.ipc.callMain('search-text', { id: searchTypes[type].id, text: text });
+			if (localNonce !== searchNonces[type]) {
+				runningSearches--;
+				return;
+			}
 			searchErrors[type] = null;
 			searchResults[type] = output;
 		} catch (err) {
