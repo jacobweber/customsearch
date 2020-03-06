@@ -178,7 +178,7 @@
 		if (!window.ipc) return;
 		const oldPath = document.getElementById('search-types-path').value;
 		const searchTypesPath = await window.ipc.callMain('prefs.search-types-browse', { path: oldPath });
-		if (searchTypesPath) {
+		if (searchTypesPath && searchTypesPath !== oldPath) {
 			const searchTypes = await window.ipc.callMain('prefs.search-types-get', { path: searchTypesPath });
 			prefs.searchTypes = searchTypes;
 			const searchTypesOrder = searchTypes.map(type => type.id).join(',');

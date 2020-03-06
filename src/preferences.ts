@@ -132,7 +132,9 @@ export const loadSearchTypes = async function(searchTypesPath: string): Promise<
 };
 
 export const savePreferences = async function(data: Preferences = {}, oldData: Preferences = null): Promise<Preferences> {
-	const searchTypes = await loadSearchTypes(data.searchTypesPath);
+	const searchTypes = oldData.searchTypesPath === data.searchTypesPath
+		? oldData.searchTypes
+		: await loadSearchTypes(data.searchTypesPath);
 	const customParams: CustomParamsMap = {};
 	for (const searchType of searchTypes) {
 		if (searchType.customParams) {
