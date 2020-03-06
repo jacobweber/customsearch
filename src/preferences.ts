@@ -1,5 +1,4 @@
 import * as fs from 'fs-extra';
-const fsPromises = fs.promises;
 import * as keytar from 'keytar';
 import * as path from 'path';
 import * as electron from 'electron';
@@ -107,13 +106,13 @@ export const exportSearchTypes = function(searchTypes: Array<SearchType>): Expor
 
 export const loadSearchTypes = async function(): Promise<SearchType[]> {
 	try {
-		const files = await fsPromises.readdir(searchTypesPath);
+		const files = await fs.readdir(searchTypesPath);
 		return (await Promise.all(files.map(async file => {
 			const filePath = path.join(searchTypesPath, file);
-			if ((await fsPromises.stat(filePath)).isDirectory()) {
+			if ((await fs.stat(filePath)).isDirectory()) {
 				try {
 					const indexPath = path.join(filePath, 'index.js');
-					await fsPromises.access(indexPath);
+					await fs.access(indexPath);
 					delete require.cache[require.resolve(indexPath)];
 					return require(indexPath);
 				} catch (err) {
@@ -183,7 +182,7 @@ const writePreferences = async function(data: Preferences): Promise<void> {
 	};
 
 	const dataJSON = JSON.stringify(dataToSave, null, '\t');
-	await fsPromises.writeFile(path.join(userData, 'preferences.json'), dataJSON, { encoding: 'utf8' });
+	await fs.writeFile(path.join(userData, 'preferences.json'), dataJSON, { encoding: 'utf8' });
 	return;
 };
 
@@ -197,7 +196,7 @@ export const loadPreferences = async function(): Promise<{
 	let justCreated = false;
 	let prefs: Preferences = null;
 	try {
-		const dataJSON = await fsPromises.readFile(path.join(userData, 'preferences.json'), { encoding: 'utf8' });
+		const dataJSON = await fs.readFile(path.join(userData, 'preferences.json'), { encoding: 'utf8' });
 		prefs = JSON.parse(dataJSON);
 		if (!prefs) prefs = null;
 	} catch (e) {
@@ -218,7 +217,7 @@ export const loadPreferences = async function(): Promise<{
 
 const loadDefaults = async function(): Promise<Defaults> {
 	try {
-		const defaultsJSON = await fsPromises.readFile(path.join(__dirname, 'defaults.json'), { encoding: 'utf-8' });
+		const defaultsJSON = await fs.readFile(path.join(__dirname, 'defaults.json'), { encoding: 'utf-8' });
 		const defaults: Defaults = JSON.parse(defaultsJSON);
 		if (!defaults) return {};
 		return defaults;
@@ -234,7 +233,7 @@ const copyDefaultSearchTypes = async function(defaults: Defaults): Promise<void>
 		: path.join(__dirname, '..', 'searches');
 	try {
 		await fs.ensureDir(searchTypesPath);
-		await fsPromises.stat(sourcePath);
+		await fs.stat(sourcePath);
 	} catch (err) {
 		console.error(err);
 		return;
@@ -242,7 +241,7 @@ const copyDefaultSearchTypes = async function(defaults: Defaults): Promise<void>
 
 	try {
 		const existingSearchTypes = await loadSearchTypes();
-		const files = (await fsPromises.readdir(sourcePath)).filter((file: string): boolean => {
+		const files = (await fs.readdir(sourcePath)).filter((file: string): boolean => {
 			return file === readme || !defaults.searchTypes || defaults.searchTypes.includes(file);
 		});
 		await Promise.all(files.map(async file => {
