@@ -147,8 +147,11 @@
 		const results = searchResults[currentType];
 		if (results.length <= currentResult) return;
 		const result = results[currentResult];
+		let copyValue = result.clipboard;
+		if (copyValue === undefined) copyValue = result.url;
+		if (copyValue === undefined) return;
 		const el = document.createElement('textarea');
-		el.value = result.clipboard || result.url;
+		el.value = copyValue;
 		document.body.appendChild(el);
 		el.select();
 		document.execCommand('copy');
@@ -266,6 +269,7 @@
 	const openSelectedItem = function() {
 		if (searchResults[currentType].length <= currentResult) return;
 		const url = searchResults[currentType][currentResult].url;
+		if (url === undefined) return;
 		if (window.ipc) {
 			window.ipc.send('open-url', url);
 		} else {
