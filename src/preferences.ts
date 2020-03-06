@@ -20,7 +20,6 @@ export interface SearchResult {
 	title?: string;
 	subtitle?: string;
 	subtitleHTML?: string;
-	alwaysShowsSubtitle?: boolean;
 	url?: string;
 	badge?: string;
 	icon?: string;
