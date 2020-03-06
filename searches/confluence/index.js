@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = {
 	'id': 'confluence',
 	'label': 'Confluence',
-	'icon': 'confluence/icon.png',
+	'icon': 'icon.png',
 	'maskIcon': true,
 	'customParams': [
 		{
@@ -85,7 +85,7 @@ module.exports = {
 					'title': item.title,
 					'url': instance + item._links.webui,
 					'badge': confSplace.substring(confSplace.lastIndexOf('/') + 1),
-					'icon': 'confluence/' + item.type + '.png'
+					'icon': item.type + '.png'
 				});
 			});
 		}

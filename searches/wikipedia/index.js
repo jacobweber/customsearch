@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = {
 	'id': 'wikipedia',
 	'label': 'Wikipedia',
-	'icon': 'wikipedia/icon.png',
+	'icon': 'icon.png',
 	'maskIcon': true,
 	'css': `.result .searchmatch {
 		font-weight: bold;
@@ -37,7 +37,7 @@ module.exports = {
 					'title': item.title,
 					'subtitleHTML': item.snippet,
 					'url': instance + '/wiki/' + encodeURIComponent(item.title.replace(/ /g, '_')),
-					'icon': 'wikipedia/document.png'
+					'icon': 'document.png'
 				});
 			});
 		}

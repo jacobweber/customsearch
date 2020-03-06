@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = {
 	'id': 'jira',
 	'label': 'JIRA',
-	'icon': 'jira/icon.png',
+	'icon': 'icon.png',
 	'maskIcon': true,
 	'customParams': [
 		{
@@ -88,7 +88,7 @@ module.exports = {
 					'subtitle': item.fields.description ? item.fields.description.substring(0, 200) : '',
 					'url': instance + '/browse/' + item.key,
 					'badge': item.key,
-					'icon': 'jira/document.png'
+					'icon': 'document.png'
 				});
 			});
 		}

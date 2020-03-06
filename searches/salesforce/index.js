@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = {
 	'id': 'salesforce',
 	'label': 'Salesforce',
-	'icon': 'salesforce/icon.png',
+	'icon': 'icon.png',
 	'customParams': [
 		{
 			id: 'username',
@@ -66,7 +66,7 @@ module.exports = {
 					'subtitle': issue.Description,
 					'url': instance + '/' + issue.Id,
 					'badge': issue.CaseNumber,
-					'icon': 'salesforce/document.png'
+					'icon': 'document.png'
 				});
 			});
 		}

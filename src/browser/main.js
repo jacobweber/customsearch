@@ -195,7 +195,7 @@
 		});
 		searchTypes.forEach(function(search, idx) {
 			const html = `<button class="type" id="type_${idx}" tabindex="-1">
-				${search.icon ? `<img class="icon${search.maskIcon ? ' masked' : ''}" src="/searches/${htmlEscape(search.icon)}" />` : ''}
+				${search.icon ? `<img class="icon${search.maskIcon ? ' masked' : ''}" src="${htmlEscape('/searches/' + search.id + '/' + search.icon)}" />` : ''}
 				${htmlEscape(search.label)}
 			</button>`;
 			types.insertAdjacentHTML('beforeend', html);
@@ -219,6 +219,7 @@
 		document.getElementById('error').innerText = error;
 		document.getElementById('error').style.display = error ? '' : 'none';
 
+		const id = searchTypes[currentType].id;
 		if (searchResults[currentType] === undefined) searchResults[currentType] = [];
 		const results = searchResults[currentType];
 		const parent = document.getElementById('results');
@@ -229,7 +230,7 @@
 		}
 		results.forEach(function(result, idx) {
 			const html = `<div class="result" id="result_${idx}">
-				${result.icon ? `<div class="icon"><img src="${htmlEscape(result.icon.startsWith('http') ? result.icon : '/searches/' + result.icon)}" /></div>` : ''}
+				${result.icon ? `<div class="icon"><img src="${htmlEscape(result.icon.startsWith('http') ? result.icon : '/searches/' + id + '/' + result.icon)}" /></div>` : ''}
 				<div class="main">
 					<div class="title">${htmlEscape(result.title)}</div>
 					${result.subtitleHTML ? `<div class="subtitle">${result.subtitleHTML}</div>`
