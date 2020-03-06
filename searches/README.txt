@@ -6,17 +6,14 @@ The index.js file should look like this:
 module.exports = {
 	'id': string, required; unique identifier, same as folder name
 	'label': string, required; text to display in search list
-	'icon': string; path to 64x64px icon to display in search list
+	'icon': string; name of 64x64px icon in same directory, to display in search list
 	'maskIcon': boolean; true to make icon white when selected
 	'css': string; CSS rules to add to search results
-	'customParams': [ array of objects; custom settings to display in Preferences
-		{
-			'id': string, required; unique identifier
-			'label': string, required; label to display
-			'default': string; default value
-			'password': boolean; true to mask value and store securely 
-		}
-	]
+	'customParams': array of objects defining custom preferences settings:
+		'id': string, required; unique identifier
+		'label': string, required; label to display
+		'default': string; default value
+		'password': boolean; true to mask value and store securely 
 	'search': async function to perform search
 		will be called with parameters:
 			search: string; text to search for
@@ -27,11 +24,12 @@ module.exports = {
 			modulesPath: string; path to app's modules directory
 				can include node-fetch, xml2js, or jsforce like this:
 				const myModule = require(path.join(modulesPath, 'myModuleName'));
-		should throw error with message, or return array of result objects:
-			title: string, required; text to display
-			subtitle: string; text to display below title
-			subtitleHTML: string; HTML to display below title; overrides subtitle
-			url: string; URL to open when selected
-			badge: string; text to display in badge on right
-			icon: string; path to 64x64px icon to display on left
-			clipboard: string; text to copy when selected; defaults to url
+		should return array of objects defining search results:
+			'title': string, required; text to display
+			'subtitle': string; text to display below title
+			'subtitleHTML': string; HTML to display below title; overrides subtitle
+			'url': string; URL to open when selected
+			'badge': string; text to display in badge on right
+			'icon': string; name of 64x64px icon in same directory, to display on left
+			'clipboard': string; text to copy when selected; defaults to url
+		can also throw error with message to display
