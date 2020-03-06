@@ -185,7 +185,7 @@ const writePreferences = async function(data: Preferences): Promise<void> {
 		customParams: data.customParams
 	};
 
-	const dataJSON = JSON.stringify(dataToSave);
+	const dataJSON = JSON.stringify(dataToSave, null, '\t');
 	await fsPromises.writeFile(path.join(userData, 'preferences.json'), dataJSON, { encoding: 'utf8' });
 	return;
 };
