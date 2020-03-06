@@ -22,8 +22,8 @@ module.exports = {
 				can be called with the ID of a customParam with password: true,
 				will return its value
 			modulesPath: string; path to app's modules directory
-				can include node-fetch, xml2js, or jsforce like this:
-				const myModule = require(path.join(modulesPath, 'myModuleName'));
+				can include node-fetch or xml2js like this:
+				const fetch = require(path.join(modulesPath, 'node-fetch'));
 		should return array of objects defining search results:
 			'title': string, required; text to display
 			'subtitle': string; text to display below title

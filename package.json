@@ -53,7 +53,6 @@
   "dependencies": {
     "electron-better-ipc": "^0.8.0",
     "fs-extra": "^8.1.0",
-    "jsforce": "^1.9.3",
     "keytar": "^5.4.0",
     "node-fetch": "^2.6.0",
     "xml2js": "^0.4.23"

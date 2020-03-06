@@ -1,4 +1,5 @@
 const path = require('path');
+const SalesforceConnection = require('node-salesforce-connection');
 
 module.exports = {
 	'id': 'salesforce',
@@ -21,9 +22,7 @@ module.exports = {
 		}
 	],
 	'search': async function(search, customParams, getPassword, modulesPath) {
-		const jsforce = require(path.join(modulesPath, 'jsforce'));
-
-		const instance = 'https://login.salesforce.com';
+		const instance = 'login.salesforce.com';
 		if (!customParams.username) {
 			throw new Error('Username required.');
 		}
@@ -35,10 +34,15 @@ module.exports = {
 			return [];
 		}
 
-		if (!this.conn) {
-			const conn = new jsforce.Connection({ loginUrl: instance });
-			await conn.login(username, password + secToken);
-			this.conn = conn;
+		if (!this.sfConn) {
+			const sfConn = new SalesforceConnection();
+			await sfConn.soapLogin({
+				hostname: instance,
+				apiVersion: '39.0',
+				username: username,
+				password: password + secToken
+			});
+			this.sfConn = sfConn;
 		}
 
 		const queryParts = [];
@@ -52,20 +56,20 @@ module.exports = {
 		if (/^[0-9]+$/i.test(search)) {
 			queryParts.push('CaseNumber = \'' + ('0000000' + search).substr(-8) + '\'');
 		}
-		const query = queryParts.join(' OR ');
+		const query = 'SELECT Subject,Description,Id,CaseNumber FROM Case'
+			+ ' WHERE ' + queryParts.join(' OR ')
+			+ ' LIMIT 10';
 
-		const result = await this.conn.sobject("Case")
-			.select('Subject,Description,Id,CaseNumber')
-			.limit(10)
-			.where(query);
+		const result = await this.sfConn.rest('/services/data/v39.0/query/?q='
+			+ encodeURIComponent(query));
 		const output = [];
 		if (result) {
-			result.forEach(function(issue) {
+			result.records.forEach(function(record) {
 				output.push({
-					'title': issue.Subject,
-					'subtitle': issue.Description,
-					'url': instance + '/' + issue.Id,
-					'badge': issue.CaseNumber,
+					'title': record.Subject,
+					'subtitle': record.Description,
+					'url': 'https://' + instance + '/' + record.Id,
+					'badge': record.CaseNumber,
 					'icon': 'document.png'
 				});
 			});
