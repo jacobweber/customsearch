@@ -140,6 +140,14 @@
 		return customParams;
 	}
 
+	async function reloadSearchTypes() {
+		const searchTypesPath = document.getElementById('search-types-path').value;
+		const searchTypes = await window.ipc.callMain('prefs.search-types-get', { path: searchTypesPath });
+		prefs.searchTypes = searchTypes
+		const customParams = getEnteredCustomParams();
+		refreshCustomParamsFields(searchTypes, customParams);
+	}
+
 	let prefs = {};
 	if (window.ipc) {
 		prefs = await window.ipc.callMain('get-prefs');
@@ -179,14 +187,22 @@
 		const oldPath = document.getElementById('search-types-path').value;
 		const searchTypesPath = await window.ipc.callMain('prefs.search-types-browse', { path: oldPath });
 		if (searchTypesPath && searchTypesPath !== oldPath) {
-			const searchTypes = await window.ipc.callMain('prefs.search-types-get', { path: searchTypesPath });
-			prefs.searchTypes = searchTypes;
-			const searchTypesOrder = searchTypes.map(type => type.id).join(',');
 			document.getElementById('search-types-path').value = searchTypesPath;
+			await reloadSearchTypes();
+			const searchTypesOrder = searchTypes.map(type => type.id).join(',');
 			document.getElementById('search-types-order').value = searchTypesOrder;
-			const customParams = getEnteredCustomParams();
-			refreshCustomParamsFields(searchTypes, customParams);
 		}
+	});
+
+	document.getElementById('button-search-types-reload').addEventListener('click', async function() {
+		if (!window.ipc) return;
+		await reloadSearchTypes();
+		const searchTypesOrder = document.getElementById('search-types-order').value;
+		// remove elements from order that no longer exist
+		const updatedOrder = searchTypesOrder.split(/\s*,\s*/).filter(orderID => {
+			return prefs.searchTypes.find(type => type.id === orderID) !== undefined;
+		}).join(',');
+		document.getElementById('search-types-order').value = updatedOrder;
 	});
 
 	document.getElementById('button-search-types-order-reset').addEventListener('click', function() {

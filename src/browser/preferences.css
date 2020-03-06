@@ -30,6 +30,9 @@ body {
 	align-items: baseline;
 	margin-bottom: 10px;
 }
+.content .buttons-row {
+	justify-content: flex-end;
+}
 .content .label {
 	width: 30%;
 	margin-right: 30px;
