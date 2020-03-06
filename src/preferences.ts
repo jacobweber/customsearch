@@ -9,6 +9,7 @@ const {
 
 const userData = app.getPath('userData');
 const dummyPasswordValue = 'password';
+const readme = 'README.txt';
 
 interface Defaults {
 	searchTypes?: Array<string>;
@@ -242,7 +243,7 @@ const copyDefaultSearchTypes = async function(searchTypesPath: string, defaults:
 
 	try {
 		const files = (await fsPromises.readdir(sourcePath)).filter((file: string): boolean => {
-			return !defaults.searchTypes || defaults.searchTypes.includes(file);
+			return file === readme || !defaults.searchTypes || defaults.searchTypes.includes(file);
 		});
 		await Promise.all(files.map(async file => {
 			await fs.copy(
