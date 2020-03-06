@@ -16,7 +16,7 @@ const {
 import { ipcMain } from 'electron-better-ipc';
 import * as url from 'url';
 import { preferencesWindow, showPreferencesWindow, hidePreferencesWindow } from './preferencesWindow';
-import { exportPrefs, loadPreferences, savePreferences, Preferences, GetPasswordFunc, CustomParamsMap, loadSearchTypes, exportSearchTypes, SearchResult } from './preferences';
+import { exportPrefs, loadPreferences, savePreferences, Preferences, GetPasswordFunc, CustomParamsMap, loadSearchTypes, exportSearchTypes, SearchResult, searchTypesPath } from './preferences';
 
 app.allowRendererProcessReuse = true;
 let win: Electron.BrowserWindow = null;
@@ -77,32 +77,12 @@ const setupMessages = () => {
 		shell.openExternal(url);
 	});
 
-	ipcMain.answerRenderer('prefs.search-types-browse', async ({ path }: { path: string }) => {
-		try {
-			const result = await dialog.showOpenDialog(preferencesWindow, {
-				properties: ['openDirectory'],
-				defaultPath: path
-			});
-			if (result.canceled) return null;
-			return result.filePaths[0];
-		} catch (err) {
-			console.error(err);
-			return null;
-		}
-	});
-	ipcMain.answerRenderer('prefs.search-types-get', async ({ path }: { path: string }) => {
-		const searchTypes = await loadSearchTypes(path);
+	ipcMain.answerRenderer('prefs.search-types-get', async () => {
+		const searchTypes = await loadSearchTypes();
 		return exportSearchTypes(searchTypes);
 	});
-	ipcMain.on('prefs.search-types-open', async (event, path: string) => {
-		if (path.length === 0) return;
-		try {
-			const result = await fsPromises.stat(path);
-			if (result.isDirectory()) {
-				shell.showItemInFolder(path);
-			}
-		} catch (err) {
-		}
+	ipcMain.on('prefs.search-types-open', async () => {
+		shell.showItemInFolder(searchTypesPath);
 	});
 	ipcMain.on('prefs.cancel', () => {
 		hidePreferencesWindow();
@@ -185,7 +165,7 @@ const appReady = async () => {
 	protocol.interceptFileProtocol('file', (request, callback) => {
 		const filePath = request.url.substr('file://'.length);
 		if (filePath.startsWith('/searches/')) {
-			const newPath = path.normalize(path.join(prefs.searchTypesPath, filePath.substr('/searches/'.length)));
+			const newPath = path.normalize(path.join(searchTypesPath, filePath.substr('/searches/'.length)));
 			callback(newPath);
 		} else {
 			callback(path.normalize(path.join(__dirname, 'browser', filePath)));

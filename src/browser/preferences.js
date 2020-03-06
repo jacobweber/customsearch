@@ -141,8 +141,7 @@
 	}
 
 	async function reloadSearchTypes() {
-		const searchTypesPath = document.getElementById('search-types-path').value;
-		const searchTypes = await window.ipc.callMain('prefs.search-types-get', { path: searchTypesPath });
+		const searchTypes = await window.ipc.callMain('prefs.search-types-get');
 		prefs.searchTypes = searchTypes
 		const customParams = getEnteredCustomParams();
 		refreshCustomParamsFields(searchTypes, customParams);
@@ -156,7 +155,6 @@
 
 	document.getElementById('launch-startup-row').style.display = prefs.launchStartup === null ? 'none' : 'block';
 	document.getElementById('launch-startup').checked = prefs.launchStartup;
-	document.getElementById('search-types-path').value = prefs.searchTypesPath || '';
 	document.getElementById('search-types-order').value = prefs.searchTypesOrder || '';
 	if (prefs.accelerator) {
 		document.getElementById('accelerator').value = prefs.accelerator;
@@ -178,20 +176,7 @@
 
 	document.getElementById('button-search-types-open').addEventListener('click', function() {
 		if (!window.ipc) return;
-		const path = document.getElementById('search-types-path').value;
-		window.ipc.send('prefs.search-types-open', path);
-	});
-
-	document.getElementById('button-search-types-browse').addEventListener('click', async function() {
-		if (!window.ipc) return;
-		const oldPath = document.getElementById('search-types-path').value;
-		const searchTypesPath = await window.ipc.callMain('prefs.search-types-browse', { path: oldPath });
-		if (searchTypesPath && searchTypesPath !== oldPath) {
-			document.getElementById('search-types-path').value = searchTypesPath;
-			await reloadSearchTypes();
-			const searchTypesOrder = searchTypes.map(type => type.id).join(',');
-			document.getElementById('search-types-order').value = searchTypesOrder;
-		}
+		window.ipc.send('prefs.search-types-open');
 	});
 
 	document.getElementById('button-search-types-reload').addEventListener('click', async function() {
@@ -218,13 +203,11 @@
 		if (!window.ipc) return;
 		const customParams = getEnteredCustomParams();
 		const launchStartup = document.getElementById('launch-startup').checked;
-		const searchTypesPath = document.getElementById('search-types-path').value;
 		const searchTypesOrder = document.getElementById('search-types-order').value;
 		const accelerator = document.getElementById('accelerator').value;
 
 		window.ipc.send('prefs.save', {
 			launchStartup,
-			searchTypesPath,
 			searchTypesOrder,
 			accelerator,
 			customParams
