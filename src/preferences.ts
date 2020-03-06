@@ -187,9 +187,9 @@ const writePreferences = async function(data: Preferences): Promise<void> {
 };
 
 export const loadPreferences = async function(): Promise<{
-		prefs: Preferences,
-		justCreated: boolean
-	}> {
+	prefs: Preferences,
+	justCreated: boolean
+}> {
 	let justCreated = false;
 	let prefs: Preferences = null;
 	try {
