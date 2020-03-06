@@ -1,5 +1,4 @@
 const path = require('path');
-console.log('reload');
 
 module.exports = {
 	'id': 'jira',
