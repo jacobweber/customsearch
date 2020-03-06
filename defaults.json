@@ -1,0 +1,4 @@
+{
+	"searchTypes": ["jira", "confluence", "salesforce", "wikipedia", "itunes"],
+	"customParams": {}
+}

@@ -9,7 +9,12 @@ const {
 
 const userData = app.getPath('userData');
 const dummyPasswordValue = 'password';
- 
+
+interface Defaults {
+	searchTypes?: Array<string>;
+	customParams?: { [key: string]: string; };
+};
+
 export interface SearchResult {
 	title?: string;
 	subtitle?: string;
@@ -180,7 +185,7 @@ const writePreferences = async function(data: Preferences): Promise<void> {
 	};
 
 	const dataJSON = JSON.stringify(dataToSave);
-	await fsPromises.writeFile(path.join(userData, 'settings.json'), dataJSON, { encoding: 'utf8' });
+	await fsPromises.writeFile(path.join(userData, 'preferences.json'), dataJSON, { encoding: 'utf8' });
 	return;
 };
 
@@ -191,7 +196,7 @@ export const loadPreferences = async function(): Promise<{
 	let justCreated = false;
 	let prefs: Preferences = null;
 	try {
-		const dataJSON = await fsPromises.readFile(path.join(userData, 'settings.json'), { encoding: 'utf8' });
+		const dataJSON = await fsPromises.readFile(path.join(userData, 'preferences.json'), { encoding: 'utf8' });
 		prefs = JSON.parse(dataJSON);
 		if (!prefs) prefs = null;
 	} catch (e) {
@@ -210,33 +215,63 @@ export const loadPreferences = async function(): Promise<{
 	return { prefs, justCreated };
 };
 
+const loadDefaults = async function(): Promise<Defaults> {
+	try {
+		const defaultsJSON = await fsPromises.readFile(path.join(__dirname, 'defaults.json'), { encoding: 'utf-8' });
+		const defaults: Defaults = JSON.parse(defaultsJSON);
+		if (!defaults) return {};
+		return defaults;
+	} catch (err) {
+		console.error(err);
+		return {};
+	}
+};
+
+const copyDefaultSearchTypes = async function(searchTypesPath: string, defaults: Defaults): Promise<void> {
+	const sourcePath = app.isPackaged
+		? path.join(process.resourcesPath, 'searches')
+		: path.join(__dirname, '..', 'searches');
+	try {
+		await fs.ensureDir(searchTypesPath);
+		await fsPromises.stat(sourcePath);
+	} catch (err) {
+		console.error(err);
+		return;
+	}
+
+	try {
+		const files = (await fsPromises.readdir(sourcePath)).filter((file: string): boolean => {
+			return !defaults.searchTypes || defaults.searchTypes.includes(file);
+		});
+		await Promise.all(files.map(async file => {
+			await fs.copy(
+				path.join(sourcePath, file),
+				path.join(searchTypesPath, file)
+			);
+		}));
+	} catch (err) {
+		console.error(err);
+	}
+};
+
 const createPreferences = async function(): Promise<Preferences> {
+	const defaults = await loadDefaults();
 	const searchTypesPath = path.join(app.getPath('userData'), 'searches');
-	let searchTypesExists = true;
+
 	try {
 		await fsPromises.stat(searchTypesPath);
 	} catch (err) {
-		searchTypesExists = false;
-	}
-	if (!searchTypesExists) {
-		const sourcePath = app.isPackaged
-			? path.join(process.resourcesPath, 'searches')
-			: path.join(__dirname, '..', 'searches');
-		try {
-			await fsPromises.stat(sourcePath);
-			await fs.copy(sourcePath, searchTypesPath);
-		} catch (err) {
-			await fs.ensureDir(searchTypesPath);
-		}
+		await copyDefaultSearchTypes(searchTypesPath, defaults);
 	}
 
 	const searchTypes = await getSearchTypes(searchTypesPath);
-	const searchTypesOrder = searchTypes.map(type => type.id).join(',');
+	const searchTypesOrder = defaults.searchTypes.join(',');
 	const prefs: Preferences = {
 		...defaultPrefs,
 		searchTypes,
 		searchTypesPath,
-		searchTypesOrder
+		searchTypesOrder,
+		customParams: defaults.customParams || {}
 	};
 	await writePreferences(prefs);
 	return prefs;

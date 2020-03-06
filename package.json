@@ -6,7 +6,7 @@
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
     "clean": "rm -rf dist out",
-    "sync": "rm -rf dist && rsync -a --exclude '*.ts' src/ dist/",
+    "sync": "rm -rf dist && rsync -a --exclude '*.ts' src/ dist/ && cp ${CUSTOMSEARCH_DEFAULTS:-defaults.json} dist/defaults.json",
     "build-dev": "npm run sync && tsc --sourcemap",
     "build": "npm run sync && tsc",
     "watch": "tsc -w",
@@ -28,10 +28,7 @@
       "dist"
     ],
     "extraResources": [
-      {
-        "from": "${env.SEARCHES_PATH}",
-        "to": "searches"
-      }
+      "searches"
     ],
     "mac": {
       "category": "public.app-category.utilities",
