@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
 	'id': 'wikipedia',
-	'name': 'Wikipedia',
+	'label': 'Wikipedia',
 	'icon': 'wikipedia/icon.png',
 	'maskIcon': true,
 	'css': `.result .searchmatch {

@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
 	'id': 'jira',
-	'name': 'JIRA',
+	'label': 'JIRA',
 	'icon': 'jira/icon.png',
 	'maskIcon': true,
 	'customParams': [

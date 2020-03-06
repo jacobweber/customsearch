@@ -39,7 +39,7 @@ export interface CustomParamsMap {
 
 export interface SearchType {
 	id: string;
-	name: string;
+	label: string;
 	icon: string;
 	search: (search: string, customParams: CustomParamsMap, getPassword: GetPasswordFunc, modulesPath: string) => Promise<SearchResult[]>;
 	maskIcon?: boolean;
@@ -64,7 +64,7 @@ export type GetPasswordFunc = (service: string, account: string) => Promise<stri
 
 export interface ExportedSearchType {
 	id: string;
-	name: string;
+	label: string;
 	icon: string;
 	maskIcon?: boolean;
 	customParams?: CustomParamDef[];
@@ -98,7 +98,7 @@ export const exportPrefs = function(prefs: Preferences): ExportedPreferences {
 export const exportSearchTypes = function(searchTypes: Array<SearchType>): ExportedSearchType[] {
 	return searchTypes.map(searchType => ({
 		id: searchType.id,
-		name: searchType.name,
+		label: searchType.label,
 		icon: searchType.icon,
 		maskIcon: searchType.maskIcon,
 		customParams: searchType.customParams,

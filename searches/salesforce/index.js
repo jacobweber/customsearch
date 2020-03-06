@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
 	'id': 'salesforce',
-	'name': 'Salesforce',
+	'label': 'Salesforce',
 	'icon': 'salesforce/icon.png',
 	'customParams': [
 		{

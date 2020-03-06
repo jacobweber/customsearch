@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
 	'id': 'confluence',
-	'name': 'Confluence',
+	'label': 'Confluence',
 	'icon': 'confluence/icon.png',
 	'maskIcon': true,
 	'customParams': [

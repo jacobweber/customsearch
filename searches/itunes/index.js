@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
 	'id': 'itunes',
-	'name': 'iTunes',
+	'label': 'iTunes',
 	'icon': 'itunes/icon.png',
 	'search': async function(search, customParams, getPassword, modulesPath) {
 		const fetch = require(path.join(modulesPath, 'node-fetch'));

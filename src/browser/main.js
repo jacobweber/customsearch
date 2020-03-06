@@ -196,7 +196,7 @@
 		searchTypes.forEach(function(search, idx) {
 			const html = `<button class="type" id="type_${idx}" tabindex="-1">
 				${search.icon ? `<img class="icon${search.maskIcon ? ' masked' : ''}" src="/searches/${htmlEscape(search.icon)}" />` : ''}
-				${htmlEscape(search.name)}
+				${htmlEscape(search.label)}
 			</button>`;
 			types.insertAdjacentHTML('beforeend', html);
 			types.lastChild.addEventListener('click', function() {

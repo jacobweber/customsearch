@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
 	'id': 'threescale',
-	'name': '3scale',
+	'label': '3scale',
 	'icon': 'threescale/icon.png',
 	'customParams': [
 		{
