@@ -232,8 +232,8 @@
 				${result.icon ? `<div class="icon"><img src="${htmlEscape(result.icon.startsWith('http') ? result.icon : '/searches/' + result.icon)}" /></div>` : ''}
 				<div class="main">
 					<div class="title">${htmlEscape(result.title)}</div>
-					${result.subtitle ? `<div class="subtitle">${htmlEscape(result.subtitle)}</div>` : ''}
-					${result.subtitleHTML ? `<div class="subtitle">${result.subtitleHTML}</div>` : ''}
+					${result.subtitleHTML ? `<div class="subtitle">${result.subtitleHTML}</div>`
+						: (result.subtitle ? `<div class="subtitle">${htmlEscape(result.subtitle)}</div>` : '')}
 				</div>
 				${result.badge ? `<div class="badge">${htmlEscape(result.badge)}</div>` : ''}
 			</div>`;
