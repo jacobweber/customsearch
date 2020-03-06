@@ -36,7 +36,7 @@ module.exports = {
 			const xml = await parser.parseStringPromise(text);
 			this.results = xml.applications.application.map(application => ({
 				id: application.id[0],
-				id: application.name[0],
+				name: application.name[0],
 				description: application.description[0],
 				serviceID: application.service_id[0],
 				appID: application.application_id[0],
