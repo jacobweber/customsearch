@@ -17,23 +17,38 @@
 				</label>
 			</div>
 			<div class="row">
+				<label class="label" for="accelerator-display">Keyboard Shortcut:</label>
+				<input type="hidden" class="text-field accelerator" id="accelerator" />
+				<input type="text" class="text-field accelerator-display" id="accelerator-display" />
+			</div>
+			<div class="row">
+				<label class="label"></label>
+				<div class="info">
+					While open, you can type text to search, or press:<br />
+					<ul>
+						<li><strong>tab</strong> or <strong>shift-tab</strong> to select a search type</li>
+						<li><strong>&uarr;</strong> or <strong>&darr;</strong> to select a result</li>
+						<li><strong>enter</strong> to open selected result</li>
+						<li><strong>esc</strong> to close</li>
+					</ul>
+				</div>
+			</div>
+			<div class="row">
 				<label class="label" for="search-types-path">Search Types Path:</label>
 				<input type="text" class="text-field search-types-path" id="search-types-path" />
 			</div>
-			<div class="row buttons-row">
-				<button class="button button-standard text-field-button" id="button-search-types-browse">Browse…</button>
-				<button class="button button-standard text-field-button" id="button-search-types-open">Open</button>
-				<button class="button button-standard text-field-button" id="button-search-types-reload">Reload</button>
+			<div class="row">
+				<label class="label"></label>
+				<div class="info">
+					<button class="button button-standard" id="button-search-types-browse">Browse…</button>
+					<button class="button button-standard spaced-button" id="button-search-types-open">Open</button>
+					<button class="button button-standard spaced-button" id="button-search-types-reload">Reload</button>
+				</div>
 			</div>
 			<div class="row">
 				<label class="label" for="search-types-order">Search Types Order:</label>
 				<input type="text" class="text-field search-types-order" id="search-types-order" />
-				<button class="button button-standard text-field-button" id="button-search-types-order-reset">Reset</button>
-			</div>
-			<div class="row">
-				<label class="label" for="accelerator-display">Keyboard Shortcut:</label>
-				<input type="hidden" class="text-field accelerator" id="accelerator" />
-				<input type="text" class="text-field accelerator-display" id="accelerator-display" />
+				<button class="button button-standard spaced-button" id="button-search-types-order-reset">Reset</button>
 			</div>
 			<div id="custom-params" class="custom-params">
 			</div>

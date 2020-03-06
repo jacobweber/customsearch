@@ -37,6 +37,13 @@ body {
 	width: 30%;
 	margin-right: 30px;
 }
+.content .info {
+	flex: 1;
+}
+.content .info ul {
+	margin: 2px;
+	padding-left: 18px;
+}
 .content .text-field {
 	border: 1px solid black;
 	height: 30px;
@@ -46,7 +53,7 @@ body {
 .content .text-field:active {
 	border: 1px solid #84bbf3;
 }
-.text-field-button {
+.spaced-button {
 	margin-left: 10px;
 }
 .buttons {
