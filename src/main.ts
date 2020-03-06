@@ -187,7 +187,7 @@ const appReady = async () => {
 			const newPath = path.normalize(path.join(prefs.searchTypesPath, filePath.substr('/searches/'.length)));
 			callback(newPath);
 		} else {
-			callback(path.normalize(path.join(__dirname, filePath)));
+			callback(path.normalize(path.join(__dirname, 'browser', filePath)));
 		}
 	});
 
