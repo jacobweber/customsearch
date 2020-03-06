@@ -120,7 +120,7 @@
 				else if (!param.password && param.default !== undefined) value = param.default;
 				const html = `<div class="row custom-params-row">
 					<input type="hidden" class="custom-params-name" value="${htmlEscape(fullName)}" />
-					<label class="label" for="custom-params-value-${idx}">${htmlEscape(searchType.name + ' ' + param.label)}:</label>
+					<label class="label" for="custom-params-value-${idx}">${htmlEscape(searchType.label + ' ' + param.label)}:</label>
 					<input type="${param.password ? 'password' : 'text'}" class="text-field custom-params-value" id="custom-params-value-${idx}" value="${htmlEscape(value)}" />
 				</div>`;
 				parent.insertAdjacentHTML('beforeend', html);
