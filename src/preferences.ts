@@ -80,14 +80,14 @@ export interface ExportedPreferences {
 	accelerator?: string;
 };
 
-export const exportPrefs = async function(prefs: Preferences): Promise<ExportedPreferences> {
+export const exportPrefs = function(prefs: Preferences): ExportedPreferences {
 	const exported: ExportedPreferences = {};
 	if (!app.getLoginItemSettings) {
 		exported.launchStartup = null;
 	} else {
 		exported.launchStartup = prefs.launchStartup;
 	}
-	exported.searchTypes = await exportSearchTypes(prefs.searchTypesPath);
+	exported.searchTypes = exportSearchTypes(prefs.searchTypes);
 	exported.searchTypesPath = prefs.searchTypesPath;
 	exported.searchTypesOrder = prefs.searchTypesOrder;
 	exported.customParams = prefs.customParams;
@@ -95,8 +95,8 @@ export const exportPrefs = async function(prefs: Preferences): Promise<ExportedP
 	return exported;
 };
 
-export const exportSearchTypes = async function(searchTypesPath: string): Promise<ExportedSearchType[]> {
-	return (await loadSearchTypes(searchTypesPath)).map(searchType => ({
+export const exportSearchTypes = function(searchTypes: Array<SearchType>): ExportedSearchType[] {
+	return searchTypes.map(searchType => ({
 		id: searchType.id,
 		name: searchType.name,
 		icon: searchType.icon,
@@ -106,7 +106,7 @@ export const exportSearchTypes = async function(searchTypesPath: string): Promis
 	}));
 };
 
-const loadSearchTypes = async function(searchTypesPath: string): Promise<SearchType[]> {
+export const loadSearchTypes = async function(searchTypesPath: string): Promise<SearchType[]> {
 	if (!searchTypesPath) return [];
 	try {
 		const files = await fsPromises.readdir(searchTypesPath);
@@ -116,7 +116,8 @@ const loadSearchTypes = async function(searchTypesPath: string): Promise<SearchT
 				try {
 					const indexPath = path.join(filePath, 'index.js');
 					await fsPromises.access(indexPath);
-					return await import(indexPath);
+					delete require.cache[require.resolve(indexPath)];
+					return require(indexPath);
 				} catch (err) {
 					console.error(err);
 					return null;

@@ -16,7 +16,7 @@ const {
 import { ipcMain } from 'electron-better-ipc';
 import * as url from 'url';
 import { preferencesWindow, showPreferencesWindow, hidePreferencesWindow } from './preferencesWindow';
-import { exportPrefs, loadPreferences, savePreferences, Preferences, GetPasswordFunc, CustomParamsMap, exportSearchTypes, SearchResult } from './preferences';
+import { exportPrefs, loadPreferences, savePreferences, Preferences, GetPasswordFunc, CustomParamsMap, loadSearchTypes, exportSearchTypes, SearchResult } from './preferences';
 
 app.allowRendererProcessReuse = true;
 let win: Electron.BrowserWindow = null;
@@ -26,8 +26,8 @@ let quitting = false;
 let quittingManually = false;
 
 const setupMessages = () => {
-	ipcMain.answerRenderer('get-prefs', async () => {
-		return await exportPrefs(prefs);
+	ipcMain.answerRenderer('get-prefs', () => {
+		return exportPrefs(prefs);
 	});
 	ipcMain.answerRenderer('search-text', async ({ id, text }: { id: string, text: string }): Promise<SearchResult[]> => {
 		if (!prefs.searchTypes) return [];
@@ -91,7 +91,8 @@ const setupMessages = () => {
 		}
 	});
 	ipcMain.answerRenderer('prefs.search-types-get', async ({ path }: { path: string }) => {
-		return await exportSearchTypes(path);
+		const searchTypes = await loadSearchTypes(path);
+		return exportSearchTypes(searchTypes);
 	});
 	ipcMain.on('prefs.search-types-open', async (event, path: string) => {
 		if (path.length === 0) return;
