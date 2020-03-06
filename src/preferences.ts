@@ -96,7 +96,7 @@ export const exportPrefs = async function(prefs: Preferences): Promise<ExportedP
 };
 
 export const exportSearchTypes = async function(searchTypesPath: string): Promise<ExportedSearchType[]> {
-	return (await getSearchTypes(searchTypesPath)).map(searchType => ({
+	return (await loadSearchTypes(searchTypesPath)).map(searchType => ({
 		id: searchType.id,
 		name: searchType.name,
 		icon: searchType.icon,
@@ -106,7 +106,7 @@ export const exportSearchTypes = async function(searchTypesPath: string): Promis
 	}));
 };
 
-export const getSearchTypes = async function(searchTypesPath: string): Promise<SearchType[]> {
+const loadSearchTypes = async function(searchTypesPath: string): Promise<SearchType[]> {
 	if (!searchTypesPath) return [];
 	try {
 		const files = await fsPromises.readdir(searchTypesPath);
@@ -131,7 +131,7 @@ export const getSearchTypes = async function(searchTypesPath: string): Promise<S
 };
 
 export const savePreferences = async function(data: Preferences = {}, oldData: Preferences = null): Promise<Preferences> {
-	const searchTypes = await getSearchTypes(data.searchTypesPath);
+	const searchTypes = await loadSearchTypes(data.searchTypesPath);
 	const customParams: CustomParamsMap = {};
 	for (const searchType of searchTypes) {
 		if (searchType.customParams) {
@@ -206,7 +206,7 @@ export const loadPreferences = async function(): Promise<{
 		prefs = await createPreferences();
 		justCreated = true;
 	} else {
-		const searchTypes = await getSearchTypes(prefs.searchTypesPath);
+		const searchTypes = await loadSearchTypes(prefs.searchTypesPath);
 		prefs = {
 			...prefs,
 			searchTypes
@@ -264,7 +264,7 @@ const createPreferences = async function(): Promise<Preferences> {
 		await copyDefaultSearchTypes(searchTypesPath, defaults);
 	}
 
-	const searchTypes = await getSearchTypes(searchTypesPath);
+	const searchTypes = await loadSearchTypes(searchTypesPath);
 	const searchTypesOrder = defaults.searchTypes.join(',');
 	const prefs: Preferences = {
 		...defaultPrefs,
