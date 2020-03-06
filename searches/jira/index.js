@@ -7,15 +7,15 @@ module.exports = {
 	'maskIcon': true,
 	'customParams': [
 		{
-			name: 'url',
+			id: 'url',
 			label: 'URL'
 		},
 		{
-			name: 'username',
+			id: 'username',
 			label: 'Username'
 		},
 		{
-			name: 'password',
+			id: 'password',
 			label: 'Password',
 			password: true
 		}

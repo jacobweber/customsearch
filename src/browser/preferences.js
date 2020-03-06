@@ -114,13 +114,13 @@
 		searchTypes.forEach(searchType => {
 			if (!searchType.customParams) return;
 			searchType.customParams.forEach(param => {
-				let fullName = searchType.id + '.' + param.name;
+				let fullID = searchType.id + '.' + param.id;
 				let value = '';
-				if (customParams && customParams[fullName] !== undefined) value = customParams[fullName];
+				if (customParams && customParams[fullID] !== undefined) value = customParams[fullID];
 				else if (!param.password && param.default !== undefined) value = param.default;
 				const html = `<div class="row custom-params-row">
-					<input type="hidden" class="custom-params-name" value="${htmlEscape(fullName)}" />
-					<label class="label" for="custom-params-value-${idx}">${htmlEscape(searchType.label + ' ' + param.label)}:</label>
+					<input type="hidden" class="custom-params-id" value="${htmlEscape(fullID)}" />
+					<label class="label" for="custom-params-value-${idx}">${htmlEscape(searchType.id + ' ' + param.label)}:</label>
 					<input type="${param.password ? 'password' : 'text'}" class="text-field custom-params-value" id="custom-params-value-${idx}" value="${htmlEscape(value)}" />
 				</div>`;
 				parent.insertAdjacentHTML('beforeend', html);
@@ -133,9 +133,9 @@
 	function getEnteredCustomParams() {
 		const customParams = {};
 		Array.from(document.getElementsByClassName('custom-params-row')).map(function(row) {
-			const name = row.getElementsByClassName('custom-params-name')[0].value;
+			const id = row.getElementsByClassName('custom-params-id')[0].value;
 			const value = row.getElementsByClassName('custom-params-value')[0].value;
-			customParams[name] = value;
+			customParams[id] = value;
 		});
 		return customParams;
 	}

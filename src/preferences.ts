@@ -27,7 +27,7 @@ export interface SearchResult {
 }
 
 interface CustomParamDef {
-	name: string;
+	id: string;
 	label: string;
 	default?: string;
 	password?: boolean;
@@ -137,22 +137,22 @@ export const savePreferences = async function(data: Preferences = {}, oldData: P
 	for (const searchType of searchTypes) {
 		if (searchType.customParams) {
 			for (const param of searchType.customParams) {
-				const fullName = searchType.id + '.' + param.name;
-				const newValue = data.customParams && data.customParams[fullName] !== undefined ? data.customParams[fullName] : '';
+				const fullID = searchType.id + '.' + param.id;
+				const newValue = data.customParams && data.customParams[fullID] !== undefined ? data.customParams[fullID] : '';
 				if (param.password) {
-					const oldValue = oldData && oldData.customParams && oldData.customParams[fullName] !== undefined ? oldData.customParams[fullName] : '';
+					const oldValue = oldData && oldData.customParams && oldData.customParams[fullID] !== undefined ? oldData.customParams[fullID] : '';
 					const changed = (newValue.length > 0 && newValue !== dummyPasswordValue)
 						|| (newValue.length === 0 && oldValue.length > 0);
 					if (changed) {
 						if (newValue.length > 0) {
-							await keytar.setPassword('customSearch.' + fullName, 'password', newValue);
+							await keytar.setPassword('customSearch.' + fullID, 'password', newValue);
 						} else {
-							await keytar.deletePassword('customSearch.' + fullName, 'password');
+							await keytar.deletePassword('customSearch.' + fullID, 'password');
 						}
 					}
-					customParams[fullName] = newValue.length > 0 ? dummyPasswordValue : '';
+					customParams[fullID] = newValue.length > 0 ? dummyPasswordValue : '';
 				} else {
-					customParams[fullName] = newValue;
+					customParams[fullID] = newValue;
 				}
 			}
 		}

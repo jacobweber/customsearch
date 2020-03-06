@@ -10,7 +10,7 @@ module.exports = {
 	}`,
 	'customParams': [
 		{
-			name: 'url',
+			id: 'url',
 			label: 'URL',
 			default: 'https://en.wikipedia.org'
 		}

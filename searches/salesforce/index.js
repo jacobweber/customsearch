@@ -6,16 +6,16 @@ module.exports = {
 	'icon': 'salesforce/icon.png',
 	'customParams': [
 		{
-			name: 'username',
+			id: 'username',
 			label: 'Username'
 		},
 		{
-			name: 'password',
+			id: 'password',
 			label: 'Password',
 			password: true
 		},
 		{
-			name: 'secToken',
+			id: 'secToken',
 			label: 'Security Token',
 			password: true
 		}

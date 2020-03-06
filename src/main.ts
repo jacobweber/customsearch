@@ -40,8 +40,8 @@ const setupMessages = () => {
 		const customParams: CustomParamsMap = {};
 		if (searchType.customParams) {
 			for (const customParam of searchType.customParams) {
-				const fullName = id + '.' + customParam.name;
-				customParams[customParam.name] = prefs.customParams[fullName];
+				const fullID = id + '.' + customParam.id;
+				customParams[customParam.id] = prefs.customParams[fullID];
 			}
 		}
 		const modulesPath = path.join(__dirname, '..', 'node_modules');
