@@ -1,5 +1,4 @@
 const path = require('path');
-console.log('load jira');
 
 module.exports = {
 	'id': 'jira',
@@ -7,7 +6,7 @@ module.exports = {
 	'icon': 'icon.png',
 	'maskIcon': true,
 	'autoUpdate': true,
-	'version': 1.3,
+	'version': 1.0,
 	'customParams': [
 		{
 			id: 'url',
