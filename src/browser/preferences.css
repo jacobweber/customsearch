@@ -37,12 +37,23 @@ body {
 	width: 30%;
 	margin-right: 30px;
 }
-.content .info {
+.content .help {
 	flex: 1;
+	font-family: Arial;
+	font-size: 15px;
 }
-.content .info ul {
+.content .help ul {
 	margin: 2px;
 	padding-left: 18px;
+}
+.content .only-mac {
+	display: none;
+}
+.content .not-mac {
+	display: none;
+}
+.content .search-types-buttons {
+	flex: 1;
 }
 .content .text-field {
 	border: 1px solid black;
@@ -53,7 +64,8 @@ body {
 .content .text-field:active {
 	border: 1px solid #84bbf3;
 }
-.spaced-button {
+.content .text-field + button,
+.content button + button {
 	margin-left: 10px;
 }
 .buttons {

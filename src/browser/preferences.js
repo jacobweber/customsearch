@@ -152,6 +152,12 @@
 		prefs = await window.ipc.callMain('get-prefs');
 		refreshCustomParamsFields(prefs.searchTypes, prefs.customParams);
 	}
+	for (const el of Array.from(document.getElementsByClassName('only-mac'))) {
+		el.style.display = isMac ? 'inline' : 'none';
+	}
+	for (const el of Array.from(document.getElementsByClassName('not-mac'))) {
+		el.style.display = isMac ? 'none' : 'inline';
+	}
 
 	document.getElementById('launch-startup-row').style.display = prefs.launchStartup === null ? 'none' : 'block';
 	document.getElementById('launch-startup').checked = prefs.launchStartup;
