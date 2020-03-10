@@ -5,7 +5,6 @@ module.exports = {
 	'id': 'salesforce',
 	'label': 'Salesforce',
 	'icon': 'icon.png',
-	'autoUpdate': true,
 	'version': 1.0,
 	'customParams': [
 		{

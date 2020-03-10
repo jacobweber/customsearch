@@ -44,7 +44,6 @@ export interface SearchType {
 	search: (search: string, customParams: CustomParamsMap, getPassword: GetPasswordFunc, modulesPath: string) => Promise<SearchResult[]>;
 	maskIcon?: boolean;
 	customParams?: CustomParamDef[];
-	autoUpdate: boolean;
 	version: number;
 	css?: string;
 }
@@ -240,7 +239,7 @@ const copyReadme = async function(sourcePath: string) {
 
 const updateSearchType = async function(sourcePath: string, file: string, sourceSearchType: SearchType, existingSearchType: SearchType | undefined) {
 	try {
-		if (!existingSearchType || (existingSearchType.autoUpdate && existingSearchType.version !== undefined && sourceSearchType.version > existingSearchType.version)) {
+		if (!existingSearchType || (existingSearchType.version !== undefined && sourceSearchType.version > existingSearchType.version)) {
 			if (existingSearchType) {
 				await fs.remove(path.join(searchTypesPath, file));
 			}

@@ -5,7 +5,6 @@ module.exports = {
 	'label': 'JIRA',
 	'icon': 'icon.png',
 	'maskIcon': true,
-	'autoUpdate': true,
 	'version': 1.0,
 	'customParams': [
 		{
