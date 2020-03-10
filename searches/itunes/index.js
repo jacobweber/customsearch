@@ -5,6 +5,7 @@ module.exports = {
 	'label': 'iTunes',
 	'icon': 'icon.png',
 	'autoUpdate': true,
+	'version': 1.0,
 	'search': async function(search, customParams, getPassword, modulesPath) {
 		const fetch = require(path.join(modulesPath, 'node-fetch'));
 

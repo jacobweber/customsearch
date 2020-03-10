@@ -77,7 +77,7 @@ const setupMessages = () => {
 	});
 
 	ipcMain.answerRenderer('prefs.search-types-get', async () => {
-		const searchTypes = await loadSearchTypes();
+		const searchTypes = await loadSearchTypes(searchTypesPath, true);
 		return exportSearchTypes(searchTypes);
 	});
 	ipcMain.on('prefs.search-types-open', async () => {

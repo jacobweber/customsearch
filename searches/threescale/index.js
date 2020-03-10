@@ -5,6 +5,7 @@ module.exports = {
 	'label': '3scale',
 	'icon': 'icon.png',
 	'autoUpdate': true,
+	'version': 1.0,
 	'customParams': [
 		{
 			id: 'url',

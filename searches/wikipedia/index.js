@@ -9,6 +9,7 @@ module.exports = {
 		font-weight: bold;
 	}`,
 	'autoUpdate': true,
+	'version': 1.0,
 	'customParams': [
 		{
 			id: 'url',

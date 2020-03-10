@@ -45,6 +45,7 @@ export interface SearchType {
 	maskIcon?: boolean;
 	customParams?: CustomParamDef[];
 	autoUpdate: boolean;
+	version: number;
 	css?: string;
 }
 
@@ -104,7 +105,7 @@ export const exportSearchTypes = function(searchTypes: Array<SearchType>): Expor
 	}));
 };
 
-export const loadSearchTypes = async function(): Promise<SearchType[]> {
+export const loadSearchTypes = async function(searchTypesPath: string, reload: boolean): Promise<SearchType[]> {
 	try {
 		const files = await fs.readdir(searchTypesPath);
 		return (await Promise.all(files.map(async file => {
@@ -113,7 +114,9 @@ export const loadSearchTypes = async function(): Promise<SearchType[]> {
 				try {
 					const indexPath = path.join(filePath, 'index.js');
 					await fs.access(indexPath);
-					delete require.cache[require.resolve(indexPath)];
+					if (reload) {
+						delete require.cache[require.resolve(indexPath)];
+					}
 					return require(indexPath);
 				} catch (err) {
 					console.error(err);
@@ -129,7 +132,7 @@ export const loadSearchTypes = async function(): Promise<SearchType[]> {
 };
 
 export const savePreferences = async function(data: Preferences = {}, oldData: Preferences = null): Promise<Preferences> {
-	const searchTypes = await loadSearchTypes();
+	const searchTypes = await loadSearchTypes(searchTypesPath, true);
 	const customParams: CustomParamsMap = {};
 	for (const searchType of searchTypes) {
 		if (searchType.customParams) {
@@ -191,7 +194,7 @@ export const loadPreferences = async function(): Promise<{
 	justCreated: boolean
 }> {
 	const defaults = await loadDefaults();
-	await copyDefaultSearchTypes(defaults);
+	await updateSearchTypes(defaults);
 
 	let justCreated = false;
 	let prefs: Preferences = null;
@@ -207,7 +210,7 @@ export const loadPreferences = async function(): Promise<{
 		justCreated = true;
 	}
 
-	const searchTypes = await loadSearchTypes();
+	const searchTypes = await loadSearchTypes(searchTypesPath, false);
 	prefs = {
 		...prefs,
 		searchTypes
@@ -227,37 +230,53 @@ const loadDefaults = async function(): Promise<Defaults> {
 	}
 };
 
-const copyDefaultSearchTypes = async function(defaults: Defaults): Promise<void> {
+const copyReadme = async function(sourcePath: string) {
+	try {
+		await fs.stat(path.join(searchTypesPath, readme));
+	} catch (err) {
+		await fs.copy(path.join(sourcePath, readme), path.join(searchTypesPath, readme));
+	}
+}
+
+const updateSearchType = async function(sourcePath: string, file: string, sourceSearchType: SearchType, existingSearchType: SearchType | undefined) {
+	try {
+		if (!existingSearchType || (existingSearchType.autoUpdate && existingSearchType.version !== undefined && sourceSearchType.version > existingSearchType.version)) {
+			if (existingSearchType) {
+				await fs.remove(path.join(searchTypesPath, file));
+			}
+			await fs.copy(
+				path.join(sourcePath, file),
+				path.join(searchTypesPath, file)
+			);
+		}
+	} catch (err) {
+		console.error(err);
+	}
+}
+
+const updateSearchTypes = async function(defaults: Defaults): Promise<void> {
 	const sourcePath = app.isPackaged
 		? path.join(process.resourcesPath, 'searches')
 		: path.join(__dirname, '..', 'searches');
 	try {
-		await fs.ensureDir(searchTypesPath);
 		await fs.stat(sourcePath);
-	} catch (err) {
-		console.error(err);
-		return;
-	}
+		await fs.ensureDir(searchTypesPath);
+		await copyReadme(sourcePath);
 
-	try {
-		const existingSearchTypes = await loadSearchTypes();
-		const files = (await fs.readdir(sourcePath)).filter((file: string): boolean => {
-			return file === readme || !defaults.searchTypes || defaults.searchTypes.includes(file);
+		const sourceSearchTypes = await loadSearchTypes(sourcePath, false);
+		const existingSearchTypes = await loadSearchTypes(searchTypesPath, false);
+		const sourceFiles = (await fs.readdir(sourcePath)).filter((file: string): boolean => {
+			return !defaults.searchTypes || defaults.searchTypes.includes(file);
 		});
-		await Promise.all(files.map(async file => {
-			const existing = existingSearchTypes.find(type => type.id === file);
-			if (!existing || existing.autoUpdate) {
-				if (existing) {
-					await fs.remove(path.join(searchTypesPath, file));
-				}
-				await fs.copy(
-					path.join(sourcePath, file),
-					path.join(searchTypesPath, file)
-				);
-			}
+		await Promise.all(sourceFiles.map(async file => {
+			const sourceSearchType = sourceSearchTypes.find(type => type.id === file);
+			if (!sourceSearchType) return;
+			const existingSearchType = existingSearchTypes.find(type => type.id === file);
+			await updateSearchType(sourcePath, file, sourceSearchType, existingSearchType);
 		}));
 	} catch (err) {
 		console.error(err);
+		return;
 	}
 };
 
