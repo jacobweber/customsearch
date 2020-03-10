@@ -11,11 +11,6 @@ const dummyPasswordValue = 'password';
 const readme = 'README.txt';
 export const searchTypesPath = path.join(userData, 'searches');
 
-interface Defaults {
-	searchTypes?: Array<string>;
-	customParams?: { [key: string]: string; };
-};
-
 export interface SearchResult {
 	title?: string;
 	subtitle?: string;
@@ -34,7 +29,7 @@ interface CustomParamDef {
 }
 
 export interface CustomParamsMap {
-	[key: string]: string;
+	[key: string]: string | undefined;
 }
 
 export interface SearchType {
@@ -60,7 +55,12 @@ const defaultPrefs = {
 	accelerator: 'Alt+Space'
 };
 
-export type GetPasswordFunc = (service: string, account: string) => Promise<string>;
+interface Defaults {
+	searchTypes?: Array<string>;
+	customParams?: CustomParamsMap;
+};
+
+export type GetPasswordFunc = (service: string, account: string) => Promise<string | null>;
 
 export interface ExportedSearchType {
 	id: string;
@@ -72,7 +72,7 @@ export interface ExportedSearchType {
 }
 
 export interface ExportedPreferences {
-	launchStartup?: boolean;
+	launchStartup?: boolean | null;
 	searchTypesOrder?: string;
 	searchTypes?: ExportedSearchType[];
 	customParams?: CustomParamsMap;
@@ -86,7 +86,7 @@ export const exportPrefs = function(prefs: Preferences): ExportedPreferences {
 	} else {
 		exported.launchStartup = prefs.launchStartup;
 	}
-	exported.searchTypes = exportSearchTypes(prefs.searchTypes);
+	exported.searchTypes = prefs.searchTypes ? exportSearchTypes(prefs.searchTypes) : [];
 	exported.searchTypesOrder = prefs.searchTypesOrder;
 	exported.customParams = prefs.customParams;
 	exported.accelerator = prefs.accelerator;
@@ -130,16 +130,18 @@ export const loadSearchTypes = async function(searchTypesPath: string, reload: b
 	}
 };
 
-export const savePreferences = async function(data: Preferences = {}, oldData: Preferences = null): Promise<Preferences> {
+export const savePreferences = async function(data: Preferences = {}, oldData?: Preferences): Promise<Preferences> {
 	const searchTypes = await loadSearchTypes(searchTypesPath, true);
 	const customParams: CustomParamsMap = {};
 	for (const searchType of searchTypes) {
 		if (searchType.customParams) {
 			for (const param of searchType.customParams) {
 				const fullID = searchType.id + '.' + param.id;
-				const newValue = data.customParams && data.customParams[fullID] !== undefined ? data.customParams[fullID] : '';
+				let newValue = data.customParams ? data.customParams[fullID] : '';
+				if (newValue === undefined) newValue = '';
 				if (param.password) {
-					const oldValue = oldData && oldData.customParams && oldData.customParams[fullID] !== undefined ? oldData.customParams[fullID] : '';
+					let oldValue = oldData && oldData.customParams ? oldData.customParams[fullID] : '';
+					if (oldValue === undefined) oldValue = '';
 					const changed = (newValue.length > 0 && newValue !== dummyPasswordValue)
 						|| (newValue.length === 0 && oldValue.length > 0);
 					if (changed) {
@@ -196,7 +198,7 @@ export const loadPreferences = async function(): Promise<{
 	await updateSearchTypes(defaults);
 
 	let justCreated = false;
-	let prefs: Preferences = null;
+	let prefs: Preferences | null = null;
 	try {
 		const dataJSON = await fs.readFile(path.join(userData, 'preferences.json'), { encoding: 'utf8' });
 		prefs = JSON.parse(dataJSON);
@@ -281,7 +283,7 @@ const updateSearchTypes = async function(defaults: Defaults): Promise<void> {
 };
 
 const createPreferences = async function(defaults: Defaults): Promise<Preferences> {
-	const searchTypesOrder = defaults.searchTypes.join(',');
+	const searchTypesOrder = defaults.searchTypes ? defaults.searchTypes.join(',') : '';
 	const prefs: Preferences = {
 		...defaultPrefs,
 		searchTypesOrder,

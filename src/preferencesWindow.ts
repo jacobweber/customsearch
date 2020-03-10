@@ -6,7 +6,7 @@ const {
 	BrowserWindow
 } = electron;
 
-let win: Electron.BrowserWindow = null;
+let win: Electron.BrowserWindow | null = null;
 export { win as preferencesWindow };
 
 function createWindow () {
@@ -35,6 +35,7 @@ function createWindow () {
 	//win.webContents.openDevTools({ mode: 'detach' });
 
 	win.on('ready-to-show', () => {
+		if (!win) return;
 		win.show();
 	});
 
@@ -52,6 +53,7 @@ export function showPreferencesWindow() {
 }
 
 export function hidePreferencesWindow() {
+	if (!win) return;
 	win.close();
 	win = null;
 }
