@@ -243,6 +243,7 @@ const updateSearchType = async function(sourcePath: string, file: string, source
 			if (existingSearchType) {
 				await fs.remove(path.join(searchTypesPath, file));
 			}
+			console.log(`updating ${file} search type`);
 			await fs.copy(
 				path.join(sourcePath, file),
 				path.join(searchTypesPath, file)
