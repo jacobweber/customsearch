@@ -81,7 +81,7 @@ export interface ExportedPreferences {
 
 export const exportPrefs = function(prefs: Preferences): ExportedPreferences {
 	const exported: ExportedPreferences = {};
-	if (!app.getLoginItemSettings) {
+	if (process.platform === 'linux') {
 		exported.launchStartup = null;
 	} else {
 		exported.launchStartup = prefs.launchStartup;
@@ -159,7 +159,7 @@ export const savePreferences = async function(data: Preferences = {}, oldData?: 
 		}
 	}
 
-	if (app.getLoginItemSettings) {
+	if (process.platform !== 'linux' && app.getLoginItemSettings) {
 		const settings = app.getLoginItemSettings({});
 		if (settings.openAtLogin !== data.launchStartup) {
 			app.setLoginItemSettings({
