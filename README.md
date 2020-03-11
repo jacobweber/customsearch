@@ -10,7 +10,7 @@ While open, you can type text to search, or press:
 * tab or shift-tab to select a search type
 * ↑ or ↓ to select a result
 * enter to open selected result
-* ctrl+c to copy selected result
+* ctrl+c or ⌘+c to copy selected result
 * esc to close
 
 You can write your own search types in JavaScript, that work with any API. Open Preferences, and click Open next to Search Types. The README.txt file has details, or you can follow the built-in examples.
