@@ -10,6 +10,7 @@ module.exports = {
 	'maskIcon': boolean; true to make icon white when selected
 	'css': string; CSS rules to add to search results
 	'version': float; only auto-update module if this is defined and lower than latest version
+		Remove this if you're customizing a module, so your changes don't get overwritten.
 	'customParams': array of objects defining custom preferences settings:
 		'id': string, required; unique identifier
 		'label': string, required; label to display
