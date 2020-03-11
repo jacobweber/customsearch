@@ -52,7 +52,7 @@ export interface Preferences {
 };
 
 const defaultPrefs = {
-	accelerator: 'Alt+Space'
+	accelerator: process.platform === 'linux' ? 'Control+Space' : 'Alt+Space'
 };
 
 interface Defaults {
