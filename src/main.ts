@@ -1,4 +1,3 @@
-import * as fs from 'fs-extra';
 import * as path from 'path';
 import * as electron from 'electron';
 import * as keytar from 'keytar';
