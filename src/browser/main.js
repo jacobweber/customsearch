@@ -315,6 +315,7 @@
 	document.getElementById('search').addEventListener('keydown', function(e) {
 		if (e.key === 'Escape') {
 			window.ipc.send('hide-window');
+			document.body.style.visibility = 'hidden';
 		} else if (e.key === 'Enter') {
 			openSelectedItem();
 		} else if (e.key === 'Tab') {
@@ -361,6 +362,7 @@
 			clearDataIfExpired();
 			refreshTypes();
 			if (searchTypes.length > 0) {
+				document.body.style.visibility = 'visible';
 				window.ipc.send('show-window');
 			}
 		});
