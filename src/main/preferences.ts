@@ -259,7 +259,7 @@ const updateSearchType = async function(sourcePath: string, file: string, source
 const updateSearchTypes = async function(defaults: Defaults): Promise<void> {
 	const sourcePath = app.isPackaged
 		? path.join(process.resourcesPath, 'searches')
-		: path.join(__dirname, '..', 'searches');
+		: path.join(__dirname, '..', '..', 'searches');
 	try {
 		await fs.stat(sourcePath);
 		await fs.ensureDir(searchTypesPath);

@@ -43,7 +43,7 @@ const setupMessages = () => {
 				customParams[customParam.id] = prefs && prefs.customParams ? prefs.customParams[fullID] : undefined;
 			}
 		}
-		const modulesPath = path.join(__dirname, '..', 'node_modules');
+		const modulesPath = path.join(__dirname, '..', '..', 'node_modules');
 		try {
 			return await searchType.search(text, customParams, getPassword, modulesPath);
 		} catch (err) {
@@ -174,7 +174,7 @@ const appReady = async () => {
 			const newPath = path.normalize(path.join(searchTypesPath, filePath.substr('/searches/'.length)));
 			callback(newPath);
 		} else {
-			callback(path.normalize(path.join(__dirname, 'browser', filePath)));
+			callback(path.normalize(path.join(__dirname, '..', 'renderer', filePath)));
 		}
 	});
 

@@ -2,11 +2,11 @@
   "name": "customsearch",
   "version": "1.0.0",
   "description": "Custom searches in a popup window.",
-  "main": "dist/main.js",
+  "main": "dist/main/main.js",
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
     "clean": "rm -rf dist out",
-    "sync": "rm -rf dist && rsync -a --exclude '*.ts' src/ dist/ && cp ${CUSTOMSEARCH_DEFAULTS:-defaults.json} dist/defaults.json",
+    "sync": "rm -rf dist && rsync -a --exclude '*.ts' src/ dist/ && cp ${CUSTOMSEARCH_DEFAULTS:-defaults.json} dist/main/defaults.json",
     "build-dev": "npm run sync && tsc --sourcemap",
     "build": "npm run sync && tsc",
     "watch": "tsc -w",
