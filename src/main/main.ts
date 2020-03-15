@@ -207,7 +207,7 @@ function createWindow () {
 	});
 
 	win.loadURL(url.format({
-		pathname: 'main.html',
+		pathname: 'search.html',
 		protocol: "file:",
 		slashes: true
 	}));
