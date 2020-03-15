@@ -2,7 +2,7 @@
 	const isMac = navigator.platform.toUpperCase().indexOf('MAC') !== -1;
 	const prefs = window.ipc ? await window.ipc.callMain('get-prefs') : {};
 	const winWidth = 600;
-	let winHeight = document.getElementById('content').offsetHeight;
+	let winHeight = document.getElementById('search').offsetHeight;
 	let winLeft = 0;
 	let winTop = 0;
 	if (window.ipc) {
@@ -10,7 +10,7 @@
 		winLeft = Math.floor(size.width / 2) - Math.floor(winWidth / 2);
 		winTop = Math.floor(size.height * .2);
 		const maxHeight = size.height - winTop;
-		document.getElementById('content').style.maxHeight = `${maxHeight}px`;
+		document.getElementById('search').style.maxHeight = `${maxHeight}px`;
 	}
 	const searchDelay = 500;
 	let lastUpdate = (new Date()).getTime();
@@ -251,7 +251,7 @@
 			});
 		});
 
-		winHeight = document.getElementById('content').offsetHeight;
+		winHeight = document.getElementById('search').offsetHeight;
 		refreshWindowSize();
 		refreshSelectedResult(false); // don't scroll when we need to resize window, or entire window will scroll
 	};
