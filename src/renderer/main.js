@@ -9,7 +9,7 @@
 		const size = await window.ipc.callMain('get-screen-size');
 		winLeft = Math.floor(size.width / 2) - Math.floor(winWidth / 2);
 		winTop = Math.floor(size.height * .2);
-		maxHeight = size.height - winTop;
+		const maxHeight = size.height - winTop;
 		document.getElementById('content').style.maxHeight = `${maxHeight}px`;
 	}
 	const searchDelay = 500;
