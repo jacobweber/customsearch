@@ -162,8 +162,8 @@
 		el.select();
 		document.execCommand('copy');
 		document.body.removeChild(el);
-		document.getElementById('search').focus();
-		document.getElementById('search').select();
+		document.getElementById('search-text').focus();
+		document.getElementById('search-text').select();
 	};
 
 	const refreshSelectedType = function() {
@@ -181,8 +181,8 @@
 		}
 
 		refreshSearch();
-		document.getElementById('search').focus();
-		document.getElementById('search').select();
+		document.getElementById('search-text').focus();
+		document.getElementById('search-text').select();
 		refreshResults();
 	};
 
@@ -217,7 +217,7 @@
 
 	const refreshSearch = function() {
 		if (searchText[currentType] === undefined) searchText[currentType] = '';
-		document.getElementById('search').value = searchText[currentType];
+		document.getElementById('search-text').value = searchText[currentType];
 	};
 
 	const refreshResults = function() {
@@ -309,10 +309,10 @@
 	};
 
 	window.addEventListener('click', function(e) {
-		document.getElementById('search').focus();
+		document.getElementById('search-text').focus();
 	});
 
-	document.getElementById('search').addEventListener('keydown', function(e) {
+	document.getElementById('search-text').addEventListener('keydown', function(e) {
 		if (e.key === 'Escape') {
 			window.ipc.send('hide-window');
 			document.body.style.visibility = 'hidden';
@@ -333,8 +333,8 @@
 		}
 	});
 
-	document.getElementById('search').addEventListener('keyup', function(e) {
-		const val = document.getElementById('search').value.trim();
+	document.getElementById('search-text').addEventListener('keyup', function(e) {
+		const val = document.getElementById('search-text').value.trim();
 		if (searchText[currentType] !== val) {
 			searchText[currentType] = val;
 			saveData();
@@ -348,8 +348,8 @@
 
 	window.addEventListener('focus', function() {
 		window.setTimeout(function() {
-			document.getElementById('search').focus();
-			document.getElementById('search').select();
+			document.getElementById('search-text').focus();
+			document.getElementById('search-text').select();
 		}, 1);
 	});
 

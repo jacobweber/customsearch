@@ -62,13 +62,13 @@ body {
 	width: 100%;
 	position: relative;
 }
-#search {
+#search-text {
 	width: 100%;
 	font-size: 20px;
 	margin: 0px;
 	padding: 3px;
 }
-#search:focus {
+#search-text:focus {
 	outline: none;
 }
 #spinner {
