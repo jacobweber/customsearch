@@ -15,23 +15,23 @@ body {
 	-webkit-user-select: none;
 }
 
-#search {
+.search {
 	padding: 10px;
 	display: flex;
 	flex-direction: column;
 }
-#types {
+.search #types {
 	display: flex;
 	flex-direction: row;
 	margin-bottom: 10px;
 	overflow-x: auto;
 }
-#types::-webkit-scrollbar {
+.search #types::-webkit-scrollbar {
 	-webkit-appearance: none;
 	width: 0;
 	height: 0;
 }
-#types .type {
+.search #types .type {
 	border: 1px solid royalblue;
 	background: none;
 	border-radius: 12px;
@@ -43,35 +43,35 @@ body {
 	flex-direction: row;
 	align-items: center;
 }
-#types .type:active,
-#types .type.selected {
+.search #types .type:active,
+.search #types .type.selected {
 	background-color: royalblue;
 	color: white;
 }
-#types .type .icon {
+.search #types .type .icon {
 	width: 16px;
 	height: 16px;
 	margin-right: 6px;
 }
-#types .type:active .icon.masked,
-#types .type.selected .icon.masked {
+.search #types .type:active .icon.masked,
+.search #types .type.selected .icon.masked {
 	filter: brightness(0) invert(1);
 }
 
-#search-container {
+.search #search-container {
 	width: 100%;
 	position: relative;
 }
-#search-text {
+.search #search-text {
 	width: 100%;
 	font-size: 20px;
 	margin: 0px;
 	padding: 3px;
 }
-#search-text:focus {
+.search #search-text:focus {
 	outline: none;
 }
-#spinner {
+.search #spinner {
 	position: absolute;
 	display: block;
 	visibility: hidden;
@@ -83,19 +83,19 @@ body {
 	height: 30px;
 }
 
-#error {
+.search #error {
 	color: red;
 	margin-top: 10px;
 	font-size: 16px;
 	overflow: hidden;
 }
 
-#results {
+.search #results {
 	margin-top: 10px;
 	max-height: 400px;
 	overflow-y: auto;
 }
-#results .result {
+.search #results .result {
 	height: 40px;
 	padding: 5px;
 	display: flex;
@@ -103,41 +103,41 @@ body {
 	align-items: center;
 	cursor: pointer;
 }
-#results .result:active,
-#results .result.selected {
+.search #results .result:active,
+.search #results .result.selected {
 	background-color: royalblue;
 	color: white
 }
-#results .result .icon {
+.search #results .result .icon {
 	margin-right: 3px;
 }
-#results .result .icon img {
+.search #results .result .icon img {
 	width: 32px;
 	height: 32px;
 }
-#results .result .main {
+.search #results .result .main {
 	flex: 1;
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
 }
-#results .result .title {
+.search #results .result .title {
 	font-size: 16px;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
 }
-#results .result .subtitle {
+.search #results .result .subtitle {
 	font-size: 12px;
 	color: gray;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
 }
-#results .result.selected .subtitle {
+.search #results .result.selected .subtitle {
 	color: lightgray;
 }
-#results .result .badge {
+.search #results .result .badge {
 	margin-left: 3px;
 	border-radius: 12px;
 	background: darkgray;
