@@ -1,4 +1,4 @@
-import { ipcRenderer } from 'electron-better-ipc';
+import { ipcRenderer } from 'electron';
 
 process.once('loaded', () => {
 	var win = (<any>window);

@@ -1,12 +1,12 @@
 (async function() {
 	const isMac = navigator.platform.toUpperCase().indexOf('MAC') !== -1;
-	const prefs = window.ipc ? await window.ipc.callMain('get-prefs') : {};
+	const prefs = window.ipc ? await window.ipc.invoke('get-prefs') : {};
 	const winWidth = 600;
 	let winHeight = document.getElementById('search').offsetHeight;
 	let winLeft = 0;
 	let winTop = 0;
 	if (window.ipc) {
-		const size = await window.ipc.callMain('get-screen-size');
+		const size = await window.ipc.invoke('get-screen-size');
 		winLeft = Math.floor(size.width / 2) - Math.floor(winWidth / 2);
 		winTop = Math.floor(size.height * .2);
 		const maxHeight = size.height - winTop;
@@ -72,7 +72,7 @@
 			runningSearches++;
 			document.getElementById('spinner').style.visibility = 'visible';
 			const localNonce = searchNonces[type] = new Object();
-			const output = await window.ipc.callMain('search-text', { id: searchTypes[type].id, text: text });
+			const output = await window.ipc.invoke('search-text', { id: searchTypes[type].id, text: text });
 			if (localNonce !== searchNonces[type]) {
 				runningSearches--;
 				return;

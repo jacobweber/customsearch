@@ -9,9 +9,9 @@ const {
 	globalShortcut,
 	shell,
 	dialog,
-	protocol
+	protocol,
+	ipcMain
 } = electron;
-import { ipcMain } from 'electron-better-ipc';
 import * as url from 'url';
 import { preferencesWindow, showPreferencesWindow, hidePreferencesWindow } from './preferencesWindow';
 import { exportPrefs, loadPreferences, savePreferences, Preferences, GetPasswordFunc, CustomParamsMap, loadSearchTypes, exportSearchTypes, SearchResult, searchTypesPath } from './preferences';
@@ -24,11 +24,11 @@ let quitting = false;
 let quittingManually = false;
 
 const setupMessages = () => {
-	ipcMain.answerRenderer('get-prefs', () => {
+	ipcMain.handle('get-prefs', () => {
 		if (!prefs) return null;
 		return exportPrefs(prefs);
 	});
-	ipcMain.answerRenderer('search-text', async ({ id, text }: { id: string, text: string }): Promise<SearchResult[]> => {
+	ipcMain.handle('search-text', async (event, { id, text }: { id: string, text: string }): Promise<SearchResult[]> => {
 		if (!prefs || !prefs.searchTypes) return [];
 		// TODO: avoid creating every time
 		const searchType = prefs.searchTypes.find(x => x.id === id);
@@ -51,7 +51,7 @@ const setupMessages = () => {
 			throw err;
 		}
 	});
-	ipcMain.answerRenderer('get-screen-size', () => {
+	ipcMain.handle('get-screen-size', () => {
 		const { width, height } = electron.screen.getPrimaryDisplay().workAreaSize;
 		return {
 			width: width,
@@ -78,7 +78,7 @@ const setupMessages = () => {
 		shell.openExternal(url);
 	});
 
-	ipcMain.answerRenderer('prefs.search-types-get', async () => {
+	ipcMain.handle('prefs.search-types-get', async () => {
 		const searchTypes = await loadSearchTypes(searchTypesPath, true);
 		return exportSearchTypes(searchTypes);
 	});

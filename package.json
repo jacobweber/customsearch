@@ -51,7 +51,6 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "electron-better-ipc": "^0.8.0",
     "fs-extra": "^8.1.0",
     "keytar": "^5.4.0",
     "node-fetch": "^2.6.0",

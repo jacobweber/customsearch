@@ -141,7 +141,7 @@
 	}
 
 	async function reloadSearchTypes() {
-		const searchTypes = await window.ipc.callMain('prefs.search-types-get');
+		const searchTypes = await window.ipc.invoke('prefs.search-types-get');
 		prefs.searchTypes = searchTypes
 		const customParams = getEnteredCustomParams();
 		refreshCustomParamsFields(searchTypes, customParams);
@@ -149,7 +149,7 @@
 
 	let prefs = {};
 	if (window.ipc) {
-		prefs = await window.ipc.callMain('get-prefs');
+		prefs = await window.ipc.invoke('get-prefs');
 		refreshCustomParamsFields(prefs.searchTypes, prefs.customParams);
 	}
 	for (const el of Array.from(document.getElementsByClassName('only-mac'))) {
