@@ -45,6 +45,7 @@
   "author": "Jacob Weber",
   "license": "ISC",
   "devDependencies": {
+    "@types/fs-extra": "^9.0.5",
     "electron": "^8.3.2",
     "electron-builder": "^22.7.0",
     "tslint": "^6.0.0",
