@@ -1,4 +1,3 @@
-const path = require('path');
 const SalesforceConnection = require('node-salesforce-connection');
 
 module.exports = {
@@ -35,7 +34,7 @@ module.exports = {
 			return [];
 		}
 
-		if (!this.sfConn) {
+		if (!this.sfConnDate || (new Date()).getTime() - 1800000 > this.sfConnDate) {
 			const sfConn = new SalesforceConnection();
 			await sfConn.soapLogin({
 				hostname: instance,
@@ -44,6 +43,7 @@ module.exports = {
 				password: password + secToken
 			});
 			this.sfConn = sfConn;
+			this.sfConnDate = (new Date()).getTime();
 		}
 
 		const queryParts = [];
@@ -61,8 +61,15 @@ module.exports = {
 			+ ' WHERE ' + queryParts.join(' OR ')
 			+ ' LIMIT 10';
 
-		const result = await this.sfConn.rest('/services/data/v39.0/query/?q='
-			+ encodeURIComponent(query));
+		let result;
+		try {
+			result = await this.sfConn.rest('/services/data/v39.0/query/?q='
+				+ encodeURIComponent(query));
+		} catch (err) {
+			delete this.sfConn;
+			delete this.sfConnDate;
+			throw err;
+		}
 		const output = [];
 		if (result) {
 			result.records.forEach(function(record) {
