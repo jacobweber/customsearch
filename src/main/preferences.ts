@@ -211,7 +211,7 @@ export const loadPreferences = async function(): Promise<{
 		justCreated = true;
 	}
 
-	const searchTypes = await loadSearchTypes(searchTypesPath, false);
+	const searchTypes = await loadSearchTypes(searchTypesPath, true); // reload in case we updated any
 	prefs = {
 		...prefs,
 		searchTypes
@@ -241,7 +241,7 @@ const copyReadme = async function(sourcePath: string) {
 
 const updateSearchType = async function(sourcePath: string, file: string, sourceSearchType: SearchType, existingSearchType: SearchType | undefined) {
 	try {
-		if (!existingSearchType || (existingSearchType.version !== undefined && sourceSearchType.version > existingSearchType.version)) {
+		if (!existingSearchType || (existingSearchType.version !== undefined && sourceSearchType.version >= existingSearchType.version)) {
 			if (existingSearchType) {
 				await fs.remove(path.join(searchTypesPath, file));
 			}
@@ -266,7 +266,7 @@ const updateSearchTypes = async function(defaults: Defaults): Promise<void> {
 		await copyReadme(sourcePath);
 
 		const sourceSearchTypes = await loadSearchTypes(sourcePath, false);
-		const existingSearchTypes = await loadSearchTypes(searchTypesPath, false);
+		const existingSearchTypes = await loadSearchTypes(searchTypesPath, false); // different path, so won't be cached
 		const sourceFiles = (await fs.readdir(sourcePath)).filter((file: string): boolean => {
 			return !defaults.searchTypes || defaults.searchTypes.includes(file);
 		});
