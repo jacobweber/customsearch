@@ -16,7 +16,6 @@ import * as url from 'url';
 import { preferencesWindow, showPreferencesWindow, hidePreferencesWindow } from './preferencesWindow';
 import { exportPrefs, loadPreferences, savePreferences, Preferences, GetPasswordFunc, CustomParamsMap, loadSearchTypes, exportSearchTypes, SearchResult, searchTypesPath } from './preferences';
 
-app.allowRendererProcessReuse = true;
 let win: Electron.BrowserWindow | null = null;
 let tray: Electron.Tray | null = null;
 let prefs: Preferences | null = null;
@@ -200,7 +199,6 @@ function createWindow () {
 		resizable: false,
 		webPreferences: {
 			preload: path.join(__dirname, 'preload.js'),
-			enableRemoteModule: false,
 			contextIsolation: false,
 			devTools: !app.isPackaged
 		}
