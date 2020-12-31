@@ -1,6 +1,6 @@
 {
   "name": "customsearch",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Custom searches in a popup window.",
   "main": "dist/main/main.js",
   "scripts": {
