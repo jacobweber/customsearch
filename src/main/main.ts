@@ -88,7 +88,7 @@ const setupMessages = () => {
 		if (!prefs) return;
 		hidePreferencesWindow();
 		if (prefs.accelerator) {
-			globalShortcut.register(prefs.accelerator, showWindow);
+			globalShortcut.register(prefs.accelerator, toggleWindow);
 		}
 	});
 	ipcMain.on('prefs.save', async (event, newPrefs: Preferences) => {
@@ -100,7 +100,7 @@ const setupMessages = () => {
 			}
 
 			if (newPrefs.accelerator) {
-				globalShortcut.register(newPrefs.accelerator, showWindow);
+				globalShortcut.register(newPrefs.accelerator, toggleWindow);
 			}
 
 			newPrefs = await savePreferences(newPrefs, oldPrefs);
@@ -182,7 +182,7 @@ const appReady = async () => {
 	if (justCreated) {
 		showPreferencesWindow();
 	} else if (prefs.accelerator) {
-		globalShortcut.register(prefs.accelerator, showWindow);
+		globalShortcut.register(prefs.accelerator, toggleWindow);
 	}
 }
 
@@ -232,10 +232,12 @@ function hideWindow() {
 	win.hide();
 }
 
-function showWindow() {
+function toggleWindow() {
 	if (!win) return;
 	if (!win.isVisible()) {
 		win.webContents.send('ask-show-window');
+	} else {
+		hideWindow();
 	}
 }
 
