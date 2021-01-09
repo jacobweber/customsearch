@@ -1,4 +1,4 @@
 {
-	"searchTypes": ["jira", "confluence", "salesforce", "wikipedia", "itunes"],
+	"searchTypes": ["jira", "confluence", "salesforce", "wikipedia", "spotify", "itunes"],
 	"customParams": {}
 }
