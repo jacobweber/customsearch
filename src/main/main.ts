@@ -203,6 +203,7 @@ function createWindow () {
 			devTools: !app.isPackaged
 		}
 	});
+	win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
 
 	win.loadURL(url.format({
 		pathname: 'search.html',
