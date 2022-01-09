@@ -20,11 +20,11 @@ function createWindow () {
 		resizable: false,
 		webPreferences: {
 			preload: path.join(__dirname, 'preload.js'),
-			enableRemoteModule: false,
 			contextIsolation: false,
 			devTools: !app.isPackaged
 		}
 	});
+	if (!win) throw 'Could not create window.';
 
 	win.loadURL(url.format({
 		pathname: 'preferences.html',
