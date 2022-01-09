@@ -13,10 +13,10 @@
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "start": "npm run build-dev && electron . --inspect=5858",
     "pack": "npm run build && electron-builder --dir",
-    "dist-mac": "npm run build && electron-builder --mac",
+    "dist-mac": "npm run build && electron-builder --mac --universal",
     "dist-lin": "npm run build && electron-builder --linux",
     "dist-win": "npm run build && electron-builder --win --x64 --ia32",
-    "dist": "npm run build && electron-builder --mac --linux --win --x64 --ia32"
+    "dist": "npm run build && electron-builder --mac --universal --linux --win --x64 --ia32"
   },
   "build": {
     "productName": "Custom Search",
